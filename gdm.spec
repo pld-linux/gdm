@@ -1,9 +1,4 @@
 #
-# BIG FAT WARNING!
-#
-#	Merged to HEAD with RM's permission. If you need GDM 2.20,
-#	create a separate spec for your personal use (like gdm-220.spec)
-#
 # TODO:
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
 # - check /etc/pam.d/gdm-autologin
