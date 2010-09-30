@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	2.30.4
+Version:	2.32.0
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.30/%{name}-%{version}.tar.bz2
-# Source0-md5:	f5e0ff54522f005d7593ac6686772988
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.32/%{name}-%{version}.tar.bz2
+# Source0-md5:	3c28e13a3d5e5f35d29669460acb57bb
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -163,7 +163,6 @@ do przełączania między użytkownikami.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-rm -f data/gdm.schemas.in
 sed -i 's/^en@shaw//' po/LINGUAS
 rm po/en@shaw.po
 
@@ -282,7 +281,6 @@ fi
 %dir %{_sysconfdir}/gdm/PostLogin
 %config %{_sysconfdir}/gdm/PostLogin/Default.sample
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
-%{_sysconfdir}/gdm/gdm.schemas
 %{_sysconfdir}/gconf/schemas/gdm-simple-greeter.schemas
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
