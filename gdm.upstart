@@ -1,0 +1,7 @@
+description "Starts the Gnome Display Manager"
+
+start on pld.sysinit-done and started messagebus
+stop on pld.shutdown-started
+
+respawn
+exec /usr/sbin/gdm
