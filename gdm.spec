@@ -5,7 +5,7 @@
 #
 # Conditiional build:
 %bcond_without	selinux	# without selinux
-#
+
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	2.32.0
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -134,6 +134,7 @@ Group:		X11/Applications
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	open
+Requires:	rc-scripts >= 0.4.3.0
 
 %description init
 Init script for GDM.
