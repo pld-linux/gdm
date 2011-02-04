@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	2.32.0
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -66,7 +66,7 @@ BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 #BuildRequires:	xorg-lib-libdmx-devel
 Requires(post,postun):	/usr/bin/scrollkeeper-update
-Requires(post,postun):	gtk+2
+Requires(post,postun):	gtk-update-icon-cache
 Requires(post,postun):	hicolor-icon-theme
 Requires(post,preun):	GConf2
 Requires(postun):	/usr/sbin/groupdel
