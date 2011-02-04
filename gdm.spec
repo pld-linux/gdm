@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	2.32.0
-Release:	1
+Version:	2.91.6
+Release:	0.1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.32/%{name}-%{version}.tar.bz2
-# Source0-md5:	3c28e13a3d5e5f35d29669460acb57bb
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.91/%{name}-%{version}.tar.bz2
+# Source0-md5:	d1a6313d9ea4da24c6399bece989fdd9
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -35,6 +35,7 @@ URL:		http://www.gnome.org/projects/gdm/
 #BuildRequires:	ConsoleKit-devel >= 0.4.1
 BuildRequires:	GConf2-devel >= 2.24.0
 BuildRequires:	UPower-devel
+BuildRequires:	accountsservice-devel
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
@@ -102,9 +103,8 @@ several different X sessions on your local machine at the same time.
 Administrador de Entrada del GNOME.
 
 %description -l ja.UTF-8
-Gdm (the GNOME Display Manager) は、高度に設定可能な xdm X Display
-Manager の再実装版です。 Gdm を使うと、 X Window System
-が動いているあなたの
+Gdm (the GNOME Display Manager) は、高度に設定可能な xdm X Display Manager
+の再実装版です。 Gdm を使うと、 X Window System が動いているあなたの
 システムにいろいろなセッションを選択してログインすることができます。
 
 このバージョンの Gdm では、各種言語や、XIM を選択することも可能です。
@@ -160,13 +160,14 @@ do przełączania między użytkownikami.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+#patch1 -p1
 %patch2 -p1
 %patch3 -p1
 sed -i 's/^en@shaw//' po/LINGUAS
 rm po/en@shaw.po
 
 %build
+touch data/gdm.schemas.in.in
 %{__libtoolize}
 %{__glib_gettextize}
 %{__intltoolize}
@@ -285,6 +286,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
+%{_sysconfdir}/dconf/db/gdm
+%{_sysconfdir}/dconf/profile/gdm
 %attr(1755,root,xdm) /var/cache/gdm
 %attr(1770,root,xdm) %dir /var/lib/gdm
 %attr(1750,root,xdm) %dir /var/lib/gdm/.gconf.mandatory
@@ -295,7 +298,6 @@ fi
 %attr(750,xdm,xdm) /home/services/xdm
 %{_pixmapsdir}/*
 %{_datadir}/gdm
-%{_datadir}/polkit-1/actions/gdm.policy
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
@@ -303,9 +305,3 @@ fi
 %files init
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
-
-%files user-switch-applet
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libexecdir}/gdm-user-switch-applet
-%{_libdir}/bonobo/servers/GNOME_FastUserSwitchApplet.server
-%{_datadir}/gnome-2.0/ui/GNOME_FastUserSwitchApplet.xml
