@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	2.91.6
-Release:	0.1
+Release:	0.2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -34,7 +34,7 @@ Patch3:		%{name}-defaults.patch
 URL:		http://www.gnome.org/projects/gdm/
 #BuildRequires:	ConsoleKit-devel >= 0.4.1
 BuildRequires:	GConf2-devel >= 2.24.0
-BuildRequires:	UPower-devel
+BuildRequires:	upower-devel
 BuildRequires:	accountsservice-devel
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
@@ -47,7 +47,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.22.0
 BuildRequires:	gnome-doc-utils
 BuildRequires:	gnome-panel-devel >= 2.24.0
-BuildRequires:	gtk+2-devel >= 2:2.14.0
+BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
 BuildRequires:	libcanberra-gtk-devel >= 0.4
@@ -67,7 +67,7 @@ BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 #BuildRequires:	xorg-lib-libdmx-devel
 Requires(post,postun):	/usr/bin/scrollkeeper-update
-Requires(post,postun):	gtk+2
+Requires(post,postun):	gtk-update-icon-cache
 Requires(post,postun):	hicolor-icon-theme
 Requires(post,preun):	GConf2
 Requires(postun):	/usr/sbin/groupdel
