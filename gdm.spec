@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	2.91.91
+Version:	2.91.93
 Release:	0.1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.91/%{name}-%{version}.tar.bz2
-# Source0-md5:	44e2f162e97451fd2957078c1877257f
+# Source0-md5:	a97e16f4329c641bf22c0b86e0fe6b36
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -35,7 +35,7 @@ URL:		http://www.gnome.org/projects/gdm/
 #BuildRequires:	ConsoleKit-devel >= 0.4.1
 BuildRequires:	GConf2-devel >= 2.24.0
 BuildRequires:	upower-devel
-BuildRequires:	accountsservice-devel
+BuildRequires:	accountsservice-devel >= 0.6.5
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
@@ -76,8 +76,9 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	/usr/bin/X
-Requires:	gnome-session >= 2.30.0
-Requires:	gnome-settings-daemon >= 2.24.0
+Requires:	accountsservice >= 0.6.5
+Requires:	gnome-session >= 2.91.91.1
+Requires:	gnome-settings-daemon >= 2.91.91
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
 Requires:	which
