@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	2.91.93
-Release:	0.1
+Release:	0.2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -32,43 +32,38 @@ Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
 URL:		http://www.gnome.org/projects/gdm/
-#BuildRequires:	ConsoleKit-devel >= 0.4.1
-BuildRequires:	GConf2-devel >= 2.24.0
-BuildRequires:	upower-devel
+BuildRequires:	GConf2-devel >= 2.32.0
 BuildRequires:	accountsservice-devel >= 0.6.5
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.9
-#BuildRequires:	check >= 0.9.4
+BuildRequires:	check >= 0.9.4
 BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.22.0
+BuildRequires:	glib2-devel >= 1:2.28.0
 BuildRequires:	gnome-doc-utils
-BuildRequires:	gnome-panel-devel >= 2.24.0
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
-BuildRequires:	libcanberra-gtk-devel >= 0.4
+BuildRequires:	libcanberra-gtk3-devel >= 0.4
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libtool
+BuildRequires:	libwrap-devel
 BuildRequires:	libxklavier-devel >= 4.0-2
 BuildRequires:	pam-devel
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
-BuildRequires:	polkit-devel
-#BuildRequires:	polkit-gnome-devel >= 0.92
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.311
-#BuildRequires:	scrollkeeper
+BuildRequires:	scrollkeeper
+BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libXdmcp-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
-#BuildRequires:	xorg-lib-libdmx-devel
 Requires(post,postun):	/usr/bin/scrollkeeper-update
 Requires(post,postun):	gtk-update-icon-cache
-Requires(post,postun):	hicolor-icon-theme
 Requires(post,preun):	GConf2
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -76,9 +71,11 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	/usr/bin/X
+Requires:	ConsoleKit >= 0.4.1
 Requires:	accountsservice >= 0.6.5
 Requires:	gnome-session >= 2.91.91.1
 Requires:	gnome-settings-daemon >= 2.91.91
+Requires:	hicolor-icon-theme
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
 Requires:	which
@@ -164,8 +161,6 @@ do przełączania między użytkownikami.
 #patch1 -p1
 %patch2 -p1
 %patch3 -p1
-sed -i 's/^en@shaw//' po/LINGUAS
-rm po/en@shaw.po
 
 %build
 touch data/gdm.schemas.in.in
@@ -289,13 +284,17 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
 %{_sysconfdir}/dconf/db/gdm
 %{_sysconfdir}/dconf/profile/gdm
-%attr(1755,root,xdm) /var/cache/gdm
+%attr(1755,root,xdm) %dir /var/cache/gdm
+%attr(1770,root,xdm) %dir /var/gdm
 %attr(1770,root,xdm) %dir /var/lib/gdm
+%dir /var/lib/gdm/.config
+%attr(755,xdm,xdm) %dir /var/lib/gdm/.config/dconf
 %attr(1750,root,xdm) %dir /var/lib/gdm/.gconf.mandatory
 %attr(1640,root,xdm) /var/lib/gdm/.gconf.mandatory/*.xml
 %attr(644,root,xdm) /var/lib/gdm/.gconf.path
-%attr(750,xdm,xdm) /var/log/gdm
-%attr(1777,root,xdm) /var/run/gdm
+%attr(750,xdm,xdm) %dir /var/log/gdm
+%attr(711,root,xdm) %dir /var/run/gdm
+%attr(755,xdm,xdm) %dir /var/run/gdm/greeter
 %attr(750,xdm,xdm) /home/services/xdm
 %{_pixmapsdir}/*
 %{_datadir}/gdm
