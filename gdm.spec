@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	2.91.93
-Release:	0.2
+Version:	2.91.94
+Release:	0.1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/2.91/%{name}-%{version}.tar.bz2
-# Source0-md5:	a97e16f4329c641bf22c0b86e0fe6b36
+# Source0-md5:	d6005130d5d983e50f1d4940be7893eb
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -37,13 +37,15 @@ BuildRequires:	accountsservice-devel >= 0.6.5
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake >= 1:1.9
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	check >= 0.9.4
 BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	docbook-dtd412-xml
+BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.28.0
 BuildRequires:	gnome-doc-utils
+BuildRequires:	gnome-panel-devel >= 2.0.0
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
@@ -53,15 +55,20 @@ BuildRequires:	libtool
 BuildRequires:	libwrap-devel
 BuildRequires:	libxklavier-devel >= 4.0-2
 BuildRequires:	pam-devel
+BuildRequires:	pango-devel >= 1.3.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.311
-BuildRequires:	scrollkeeper
+BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	upower-devel >= 0.9.0
+BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
+BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
+BuildRequires:	xorg-lib-libXrandr-devel
 Requires(post,postun):	/usr/bin/scrollkeeper-update
 Requires(post,postun):	gtk-update-icon-cache
 Requires(post,preun):	GConf2
@@ -258,6 +265,10 @@ fi
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
+%attr(755,root,root) %{_sbindir}/gdm
+%attr(755,root,root) %{_sbindir}/gdm-binary
+%attr(755,root,root) %{_bindir}/gdm-screenshot
+%attr(755,root,root) %{_bindir}/gdmflexiserver
 %attr(755,root,root) %{_libexecdir}/gdm-crash-logger
 %attr(755,root,root) %{_libexecdir}/gdm-factory-slave
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
@@ -267,8 +278,6 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-simple-greeter
 %attr(755,root,root) %{_libexecdir}/gdm-simple-slave
 %attr(755,root,root) %{_libexecdir}/gdm-xdmcp-chooser-slave
-%attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_bindir}/*
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -298,6 +307,7 @@ fi
 %attr(750,xdm,xdm) /home/services/xdm
 %{_pixmapsdir}/*
 %{_datadir}/gdm
+%{_datadir}/gnome-session/sessions/gdm.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
