@@ -164,8 +164,6 @@ do przełączania między użytkownikami.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-sed -i 's/^en@shaw//' po/LINGUAS
-rm po/en@shaw.po
 
 %build
 %{__libtoolize}
