@@ -16,7 +16,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.0.0
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -94,6 +94,8 @@ Provides:	XDM
 Provides:	group(xdm)
 Provides:	user(xdm)
 Obsoletes:	gdm-Xnest
+Obsoletes:	gdm-user-switch-applet
+Obsoletes:	gnome-applet-fast-user-switch
 Conflicts:	gdkxft
 # sr@Latn vs. sr@latin
 Conflicts:	glibc-misc < 6:2.7
@@ -147,22 +149,6 @@ Init script for GDM.
 
 %description init -l pl.UTF-8
 Skrypt init dla GDM-a.
-
-%package user-switch-applet
-Summary:	GNOME applet for fast user switching
-Summary(pl.UTF-8):	Aplet GNOME do szybkiego przełączania użytkowników
-Group:		X11/Applications
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Provides:	gnome-applet-fast-user-switch = %{epoch}:%{version}-%{release}
-Obsoletes:	gnome-applet-fast-user-switch
-
-%description user-switch-applet
-The GDM User Switch Applet is an applet for the GNOME panel which
-provides a mechanism for switching between users.
-
-%description user-switch-applet -l pl.UTF-8
-GDM User Switch Applet to aplet panelu GNOME udostępniający mechanizm
-do przełączania między użytkownikami.
 
 %prep
 %setup -q
