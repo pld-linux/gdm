@@ -34,7 +34,7 @@ Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
 URL:		http://www.gnome.org/projects/gdm/
 BuildRequires:	GConf2-devel >= 2.32.0
-BuildRequires:	accountsservice-devel >= 0.6.5
+BuildRequires:	accountsservice-devel >= 0.6.12
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
@@ -80,7 +80,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	/usr/bin/X
 Requires:	ConsoleKit >= 0.4.1
-Requires:	accountsservice >= 0.6.5
+Requires:	accountsservice >= 0.6.12
 Requires:	gnome-session >= 2.91.91.1
 Requires:	gnome-settings-daemon >= 2.91.91
 Requires:	hicolor-icon-theme
