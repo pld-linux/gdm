@@ -15,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.0.3
+Version:	3.0.4
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.0/%{name}-%{version}.tar.bz2
-# Source0-md5:	50a9ed65cab062e27ac87b7870b6ad89
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.0/%{name}-%{version}.tar.xz
+# Source0-md5:	fd90c847b3988c685cb62f775787672b
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -62,6 +62,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.311
 BuildRequires:	scrollkeeper >= 0.1.4
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -70,6 +71,7 @@ BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xz
 Requires(post,postun):	/usr/bin/scrollkeeper-update
 Requires(post,postun):	gtk-update-icon-cache
 Requires(post,preun):	GConf2
