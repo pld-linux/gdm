@@ -16,7 +16,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.0.4
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -28,6 +28,7 @@ Source3:	%{name}-pld-logo.png
 Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
+Source7:	gdm.upstart
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -60,7 +61,7 @@ BuildRequires:	pango-devel >= 1.3.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.311
+BuildRequires:	rpmbuild(macros) >= 1.450
 BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
@@ -186,7 +187,7 @@ touch data/gdm.schemas.in.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
 	$RPM_BUILD_ROOT%{_datadir}/xsessions
 
@@ -194,17 +195,18 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
 	DESTDIR=$RPM_BUILD_ROOT \
 	PAM_PREFIX=/etc
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
-install %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
+cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
+install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
+cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
 %find_lang %{name} --with-gnome --with-omf --all-name
 
 # allow executing ~/.Xclients and ~/.xsession
-install %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
-install %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
+cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -232,17 +234,13 @@ fi
 
 %triggerpostun -- %{name} < 1:2.13.0.8-1
 if [ -f /etc/X11/gdm/gdm.conf-custom.rpmsave ]; then
-    mv /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
+	mv /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
 fi
 
 %post init
 /sbin/chkconfig --add gdm
-if [ -f /var/lock/subsys/gdm ]; then
-	echo "Run \"/sbin/service gdm restart\" to restart gdm." >&2
-	echo "WARNING: it will terminate all sessions opened from gdm!" >&2
-else
-	echo "Run \"/sbin/service gdm start\" to start gdm." >&2
-fi
+# -n skips restarting as it would otherise terminate all sessions opened from gdm!
+%service -n gdm restart
 
 %preun init
 if [ "$1" = "0" ]; then
@@ -305,3 +303,4 @@ fi
 %files init
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
+%config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf
