@@ -1,6 +1,10 @@
 description "Starts the Gnome Display Manager"
 
 start on pld.sysinit-done and started messagebus
+
+# if you have haldaemon present as well:
+#start on pld.sysinit-done and started messagebus and started haldaemon
+
 stop on pld.shutdown-started
 
 respawn
