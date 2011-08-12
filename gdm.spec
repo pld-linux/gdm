@@ -2,7 +2,6 @@
 # TODO:
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
 # - check /etc/pam.d/gdm-autologin
-# - upstart package
 #
 # Conditiional build:
 %bcond_without	selinux	# without selinux
@@ -16,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.0.4
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -82,7 +81,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	/usr/bin/X
-Requires:	ConsoleKit >= 0.4.1
+Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
 Requires:	gnome-session >= 2.91.91.1
 Requires:	gnome-settings-daemon >= 2.91.91
