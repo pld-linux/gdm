@@ -21,41 +21,67 @@ if [ -f /etc/sysconfig/gdm ]; then
 	. /etc/sysconfig/gdm
 fi
 
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/gdm ]; then
+		msg_already_running "Gnome Display Manager"
+		return
+	fi
+
+	msg_starting "Gnome Display Manager"
+	start-stop-daemon --start -b --exec /usr/sbin/gdm
+	ok
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/gdm
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/gdm ]; then
+		msg_not_running "Gnome Display Manager"
+		return
+	fi
+
+	msg_stopping "Gnome Display Manager"
+	killproc gdm
+	rm -f /var/lock/subsys/gdm
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/gdm ]; then
+		msg_not_running "Gnome Display Manager"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/gdm ]; then
-		msg_starting "Gnome Display Manager"
-		start-stop-daemon --start -b --exec /usr/sbin/gdm
-		ok
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/gdm
-	else
-		msg_already_running "Gnome Display Manager"
-	fi
+	start
 	;;
   stop)
-	if [ -f /var/lock/subsys/gdm ]; then
-		msg_stopping "Gnome Display Manager"
-		killproc gdm
-		rm -f /var/lock/subsys/gdm
-	else
-		msg_not_running "Gnome Display Manager"
-	fi
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
 	;;
   status)
 	status gdm gdm-binary
-	exit $?
-	;;
-  restart|force-reload)
-	$0 stop
-	$0 start
-	exit $?
+	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
