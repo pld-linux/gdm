@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.1.90
-Release:	0.1
+Release:	0.2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -217,6 +217,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
+%glib_compile_schemas
 %gconf_schema_install gdm-simple-greeter.schemas
 %scrollkeeper_update_post
 %update_icon_cache hicolor
@@ -230,6 +231,7 @@ rm -rf $RPM_BUILD_ROOT
 %update_icon_cache hicolor
 
 if [ "$1" = "0" ]; then
+	%glib_compile_schemas
 	%userremove xdm
 	%groupremove xdm
 fi
