@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.1.90
+Version:	3.1.92
 Release:	0.2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.1/%{name}-%{version}.tar.xz
-# Source0-md5:	7e321d02eda07690feed7e7ad5c5b71b
+# Source0-md5:	01c04e88dbb3138e3c469dffadba61b5
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -208,6 +208,8 @@ touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/gdm/simple-greeter/extensions/*.{a,la}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -315,8 +317,7 @@ fi
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
-%{_datadir}/glib-2.0/schemas/org.gnome.display-manager.extensions.fingerprint.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.gnome.display-manager.extensions.smartcard.gschema.xml
+%{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
 
 #%files devel
 #%defattr(644,root,root,755)
