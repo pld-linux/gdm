@@ -27,7 +27,7 @@ Source3:	%{name}-pld-logo.png
 Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
-Source7:	gdm.upstart
+Source7:	%{name}.upstart
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -46,7 +46,6 @@ BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.28.0
 BuildRequires:	gnome-doc-utils
-BuildRequires:	gnome-panel-devel >= 2.0.0
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
