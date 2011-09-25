@@ -266,6 +266,7 @@ fi
 %attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
 %dir %{_libdir}/gdm
 %dir %{_libdir}/gdm/simple-greeter
+%dir %{_libdir}/gdm/simple-greeter/extensions
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libfingerprint.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
