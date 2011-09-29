@@ -14,20 +14,20 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.0.4
-Release:	4
+Version:	3.2.0
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.0/%{name}-%{version}.tar.xz
-# Source0-md5:	fd90c847b3988c685cb62f775787672b
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.2/%{name}-%{version}.tar.xz
+# Source0-md5:	34819420a3177fe18eac2154762ed996
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
 Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
-Source7:	gdm.upstart
+Source7:	%{name}.upstart
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -46,7 +46,6 @@ BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 1:2.28.0
 BuildRequires:	gnome-doc-utils
-BuildRequires:	gnome-panel-devel >= 2.0.0
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
@@ -138,6 +137,32 @@ GDM (GNOME Display Manager) - це реімплементація xdm (X Display
 Manager). GDM дозволяє вам входити в систему, на якій запущено X
 Window та підтримує роботу кількох різних X сеансів одночасно.
 
+%package devel
+Summary:	Header files for GDM
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja
+Group:		X11/Development/Libraries
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description devel
+This package contains the files necessary to develop applications
+using GDM's libraries.
+
+%description devel -l pl.UTF-8
+Pakiet zawiera pliki potrzebne do rozwoju aplikacji używających
+bibliotek programu GDM.
+
+%package static
+Summary:	Static libraries for GDM
+Summary(pl.UTF-8):	Biblioteki statyczne dla GDM
+Group:		X11/Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+This package contains static libraries for GDM.
+
+%description static -l pl.UTF-8
+Pakiet zawiera statyczne biblioteki GDM.
+
 %package init
 Summary:	Init script for GDM
 Summary(pl.UTF-8):	Skrypt init dla GDM-a
@@ -208,6 +233,9 @@ touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/gdm/simple-greeter/extensions/*.{a,la} \
+    $RPM_BUILD_ROOT%{_libdir}/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -216,6 +244,8 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 55 -r -d /home/services/xdm -s /bin/false -c "X Display Manager" -g xdm xdm
 
 %post
+/sbin/ldconfig
+%glib_compile_schemas
 %gconf_schema_install gdm-simple-greeter.schemas
 %scrollkeeper_update_post
 %update_icon_cache hicolor
@@ -224,10 +254,12 @@ rm -rf $RPM_BUILD_ROOT
 %gconf_schema_uninstall gdm-simple-greeter.schemas
 
 %postun
+/sbin/ldconfig
 %scrollkeeper_update_postun
 %update_icon_cache hicolor
 
 if [ "$1" = "0" ]; then
+	%glib_compile_schemas
 	%userremove xdm
 	%groupremove xdm
 fi
@@ -255,6 +287,17 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm-binary
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
+%attr(755,root,root) %{_libdir}/libgdmgreeter.so.1.0.0
+%attr(755,root,root) %ghost %{_libdir}/libgdmgreeter.so.1
+%attr(755,root,root) %{_libdir}/libgdmsimplegreeter.so.1.0.0
+%attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
+%dir %{_libdir}/gdm
+%dir %{_libdir}/gdm/simple-greeter
+%dir %{_libdir}/gdm/simple-greeter/extensions
+%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libfingerprint.so
+%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
+%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
+%{_libdir}/girepository-1.0/GdmGreeter-1.0.typelib
 %attr(755,root,root) %{_libexecdir}/gdm-crash-logger
 %attr(755,root,root) %{_libexecdir}/gdm-factory-slave
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
@@ -264,6 +307,7 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-simple-greeter
 %attr(755,root,root) %{_libexecdir}/gdm-simple-slave
 %attr(755,root,root) %{_libexecdir}/gdm-xdmcp-chooser-slave
+%attr(755,root,root) %{_libexecdir}/gdm-smartcard-worker
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -295,10 +339,28 @@ fi
 %{_pixmapsdir}/*
 %{_datadir}/gdm
 %{_datadir}/polkit-1/actions/gdm.policy
-%{_datadir}/gnome-session/sessions/gdm.session
+%{_datadir}/gnome-session/sessions/gdm-fallback.session
+%{_datadir}/gnome-session/sessions/gdm-shell.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
+%{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/gdm/greeter/gdm-greeter-client.h
+%{_includedir}/gdm/greeter/gdm-greeter-sessions.h
+%{_includedir}/gdm/simple-greeter/gdm-login-extension.h
+%{_pkgconfigdir}/gdmgreeter.pc
+%{_pkgconfigdir}/gdmsimplegreeter.pc
+%{_libdir}/libgdmgreeter.so
+%{_libdir}/libgdmsimplegreeter.so
+%{_datadir}/gir-1.0/GdmGreeter-1.0.gir
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libgdmgreeter.a
+%{_libdir}/libgdmsimplegreeter.a
 
 %files init
 %defattr(644,root,root,755)
