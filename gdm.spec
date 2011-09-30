@@ -348,8 +348,10 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%dir %{_includedir}/gdm/greeter
 %{_includedir}/gdm/greeter/gdm-greeter-client.h
 %{_includedir}/gdm/greeter/gdm-greeter-sessions.h
+%dir %{_includedir}/gdm/simple-greeter
 %{_includedir}/gdm/simple-greeter/gdm-login-extension.h
 %{_pkgconfigdir}/gdmgreeter.pc
 %{_pkgconfigdir}/gdmsimplegreeter.pc
