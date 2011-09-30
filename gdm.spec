@@ -79,6 +79,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/X
 Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
