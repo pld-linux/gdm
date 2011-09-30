@@ -79,7 +79,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/bin/X
 Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
@@ -153,7 +153,7 @@ Biblioteki GDM.
 Summary:	Header files for GDM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja
 Group:		X11/Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 
 %description devel
 This package contains the files necessary to develop applications
@@ -167,7 +167,7 @@ bibliotek programu GDM.
 Summary:	Static libraries for GDM
 Summary(pl.UTF-8):	Biblioteki statyczne dla GDM
 Group:		X11/Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 This package contains static libraries for GDM.
