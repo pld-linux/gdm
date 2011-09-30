@@ -137,11 +137,22 @@ GDM (GNOME Display Manager) - це реімплементація xdm (X Display
 Manager). GDM дозволяє вам входити в систему, на якій запущено X
 Window та підтримує роботу кількох різних X сеансів одночасно.
 
+%package libs
+Summary:	GDM libraries
+Summary(pl.UTF-8):	Biblioteki GDM
+Group:		Libraries
+
+%description libs
+GDM libraries.
+
+%description libs -l pl.UTF-8
+Biblioteki GDM.
+
 %package devel
 Summary:	Header files for GDM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 This package contains the files necessary to develop applications
@@ -287,17 +298,12 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm-binary
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
-%attr(755,root,root) %{_libdir}/libgdmgreeter.so.1.0.0
-%attr(755,root,root) %ghost %{_libdir}/libgdmgreeter.so.1
-%attr(755,root,root) %{_libdir}/libgdmsimplegreeter.so.1.0.0
-%attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
 %dir %{_libdir}/gdm
 %dir %{_libdir}/gdm/simple-greeter
 %dir %{_libdir}/gdm/simple-greeter/extensions
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libfingerprint.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
-%{_libdir}/girepository-1.0/GdmGreeter-1.0.typelib
 %attr(755,root,root) %{_libexecdir}/gdm-crash-logger
 %attr(755,root,root) %{_libexecdir}/gdm-factory-slave
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
@@ -345,6 +351,14 @@ fi
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
 %{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
+
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libgdmgreeter.so.1.0.0
+%attr(755,root,root) %ghost %{_libdir}/libgdmgreeter.so.1
+%attr(755,root,root) %{_libdir}/libgdmsimplegreeter.so.1.0.0
+%attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
+%{_libdir}/girepository-1.0/GdmGreeter-1.0.typelib
 
 %files devel
 %defattr(644,root,root,755)
