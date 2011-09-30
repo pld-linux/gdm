@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.0
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -141,7 +141,7 @@ Window та підтримує роботу кількох різних X сеа
 Summary:	Header files for GDM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja
 Group:		X11/Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 This package contains the files necessary to develop applications
