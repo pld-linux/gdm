@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.0
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -190,6 +190,19 @@ Init script for GDM.
 %description init -l pl.UTF-8
 Skrypt init dla GDM-a.
 
+%package upstart
+Summary:	Upstart job description for GDM
+Summary(pl.UTF-8):	Opis zadania Upstart dla GDM
+Group:		Daemons
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	upstart >= 0.6
+
+%description upstart
+Upstart job description for GDM.
+
+%description upstart -l pl.UTF-8
+Opis zadania Upstart dla GDM.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -363,6 +376,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%dir %{_includedir}/gdm
 %dir %{_includedir}/gdm/greeter
 %{_includedir}/gdm/greeter/gdm-greeter-client.h
 %{_includedir}/gdm/greeter/gdm-greeter-sessions.h
@@ -382,4 +396,7 @@ fi
 %files init
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
+
+%files upstart
+%defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf
