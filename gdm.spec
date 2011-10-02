@@ -269,7 +269,6 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 55 -r -d /home/services/xdm -s /bin/false -c "X Display Manager" -g xdm xdm
 
 %post
-/sbin/ldconfig
 %glib_compile_schemas
 %gconf_schema_install gdm-simple-greeter.schemas
 %scrollkeeper_update_post
@@ -279,7 +278,6 @@ rm -rf $RPM_BUILD_ROOT
 %gconf_schema_uninstall gdm-simple-greeter.schemas
 
 %postun
-/sbin/ldconfig
 %scrollkeeper_update_postun
 %update_icon_cache hicolor
 
@@ -304,6 +302,9 @@ if [ "$1" = "0" ]; then
 	%service gdm stop
 	/sbin/chkconfig --del gdm
 fi
+
+%post   libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
