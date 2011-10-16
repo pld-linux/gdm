@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.0
-Release:	3
+Release:	4
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -32,6 +32,8 @@ Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
+# https://bugzilla.gnome.org/show_bug.cgi?id=660409
+Patch4:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
 BuildRequires:	GConf2-devel >= 2.32.0
 BuildRequires:	accountsservice-devel >= 0.6.12
@@ -209,6 +211,7 @@ Opis zadania Upstart dla GDM.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 touch data/gdm.schemas.in.in
