@@ -20,7 +20,7 @@ index 3d408c3..496cc10 100644
  Name=Display Manager
  RequiredComponents=gnome-shell;gnome-settings-daemon;
 -IsRunnableHelper=@libexecdir@/gnome-session-check-accelerated
-+IsRunnableHelper=bash -c 'gnome-shell --help | grep -q gdm-mode && @libexecdir@/gnome-session-check-accelerated'
++IsRunnableHelper=sh -c 'gnome-shell --help | grep -q gdm-mode && @libexecdir@/gnome-session-check-accelerated'
  FallbackSession=gdm-fallback
 --
 cgit v0.9.0.2
