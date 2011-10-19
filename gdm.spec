@@ -14,13 +14,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.2.0
-Release:	4
+Version:	3.2.1.1
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.2/%{name}-%{version}.tar.xz
-# Source0-md5:	34819420a3177fe18eac2154762ed996
+# Source0-md5:	df3f38061066f5e0816676b4eef7854a
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -32,7 +32,6 @@ Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
-# https://bugzilla.gnome.org/show_bug.cgi?id=660409
 Patch4:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
 BuildRequires:	GConf2-devel >= 2.32.0
@@ -345,7 +344,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
-%{_sysconfdir}/dconf/db/gdm
+%{_sysconfdir}/dconf/db/gdm.d
 %{_sysconfdir}/dconf/profile/gdm
 %attr(1755,root,xdm) %dir /var/cache/gdm
 %attr(1770,root,xdm) %dir /var/gdm
