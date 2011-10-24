@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -86,6 +86,7 @@ Requires:	/usr/bin/X
 Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
 Requires:	dbus-x11
+Requires:	gdm-wm >= 3.2.1
 Requires:	gnome-session >= 2.91.91.1
 Requires:	gnome-settings-daemon >= 2.91.91
 Requires:	hicolor-icon-theme
@@ -94,6 +95,7 @@ Requires:	polkit-gnome >= 0.93
 Requires:	which
 Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
+Suggests:	pam-pam_gnome_keyring
 Suggests:	zenity
 Provides:	XDM
 Provides:	group(xdm)
@@ -249,6 +251,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	PAM_PREFIX=/etc
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
