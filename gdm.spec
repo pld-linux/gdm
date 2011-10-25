@@ -55,10 +55,12 @@ BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
 BuildRequires:	libxklavier-devel >= 4.0-2
+BuildRequires:	nss-devel >= 3.11.1
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel >= 1.3.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
+BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.450
 BuildRequires:	scrollkeeper >= 0.1.4
