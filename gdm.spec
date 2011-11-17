@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	4
+Release:	5
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -82,7 +82,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post):	dconf
+Requires(posttrans):	dconf
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/bin/X
 Requires:	ConsoleKit-x11 >= 0.4.1
@@ -273,6 +273,7 @@ cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 rm -rf $RPM_BUILD_ROOT
 
 %posttrans
+umask 022
 /usr/bin/dconf update
 
 %pre
