@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	5
+Release:	6
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -28,6 +28,7 @@ Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
+Source8:	%{name}.service
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -62,7 +63,7 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.450
+BuildRequires:	rpmbuild(macros) >= 1.623
 BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
@@ -209,6 +210,16 @@ Upstart job description for GDM.
 %description upstart -l pl.UTF-8
 Opis zadania Upstart dla GDM.
 
+%package systemd
+Summary:	systemd unit for GDM
+Group:		Daemons
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	systemd-units
+Requires:	accountsservice-systemd
+
+%description systemd
+systemd unit for GDM
+
 %prep
 %setup -q
 %patch0 -p1
@@ -246,7 +257,7 @@ touch data/gdm.schemas.in.in
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
-	$RPM_BUILD_ROOT%{_datadir}/xsessions
+	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -258,6 +269,7 @@ cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
+cp -p %{SOURCE8} $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
 %find_lang %{name} --with-gnome --with-omf --all-name
@@ -317,6 +329,16 @@ fi
 
 %post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
+
+%post systemd
+%systemd_post
+%systemd_enable gdm.service
+
+%preun systemd
+%systemd_preun gdm.service
+
+%postun systemd
+%systemd_postun gdm.service
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -413,3 +435,7 @@ fi
 %files upstart
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf
+
+%files systemd
+%defattr(644,root,root,755)
+%{systemdunitdir}/gdm.service
