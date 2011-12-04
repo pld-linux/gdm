@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	6
+Release:	7
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -63,7 +63,7 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.623
+BuildRequires:	rpmbuild(macros) >= 1.626
 BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
@@ -214,8 +214,8 @@ Opis zadania Upstart dla GDM.
 Summary:	systemd unit for GDM
 Group:		Daemons
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	systemd-units
 Requires:	accountsservice-systemd
+Requires:	systemd-units >= 37-0.10
 
 %description systemd
 systemd unit for GDM
@@ -331,14 +331,13 @@ fi
 %postun libs -p /sbin/ldconfig
 
 %post systemd
-%systemd_post
-%systemd_enable gdm.service
+%systemd_post gdm.service
 
 %preun systemd
 %systemd_preun gdm.service
 
 %postun systemd
-%systemd_postun gdm.service
+%systemd_reload
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
