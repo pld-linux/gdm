@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	7
+Release:	8
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -63,7 +63,7 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.626
+BuildRequires:	rpmbuild(macros) >= 1.627
 BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
@@ -331,6 +331,7 @@ fi
 %postun libs -p /sbin/ldconfig
 
 %post systemd
+NORESTART=1
 %systemd_post gdm.service
 
 %preun systemd
