@@ -29,6 +29,7 @@ Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
 Source8:	%{name}.service
+Source9:	%{name}.tmpfiles
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -257,7 +258,8 @@ touch data/gdm.schemas.in.in
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
-	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}}
+	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -270,6 +272,8 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 cp -p %{SOURCE8} $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
+install %{SOURCE9} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
 %find_lang %{name} --with-gnome --with-omf --all-name
@@ -391,6 +395,7 @@ NORESTART=1
 %attr(711,root,xdm) %dir /var/run/gdm
 %attr(755,xdm,xdm) %dir /var/run/gdm/greeter
 %attr(750,xdm,xdm) /home/services/xdm
+/usr/lib/tmpfiles.d/%{name}.conf
 %{_pixmapsdir}/*
 %{_datadir}/gdm
 %{_datadir}/polkit-1/actions/gdm.policy
