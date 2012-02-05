@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	10
+Release:	11
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -106,6 +106,7 @@ Provides:	XDM
 Provides:	group(xdm)
 Provides:	user(xdm)
 Obsoletes:	gdm-Xnest
+Obsoletes:	gdm-systemd
 Obsoletes:	gdm-user-switch-applet
 Obsoletes:	gnome-applet-fast-user-switch
 Conflicts:	gdkxft
