@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	9
+Release:	10
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -96,6 +96,7 @@ Requires:	gnome-settings-daemon >= 2.91.91
 Requires:	hicolor-icon-theme
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
+Requires:	systemd-units >= 37-0.10
 Requires:	which
 Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
@@ -211,16 +212,6 @@ Upstart job description for GDM.
 %description upstart -l pl.UTF-8
 Opis zadania Upstart dla GDM.
 
-%package systemd
-Summary:	systemd unit for GDM
-Group:		Daemons
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	accountsservice-systemd
-Requires:	systemd-units >= 37-0.10
-
-%description systemd
-systemd unit for GDM
-
 %prep
 %setup -q
 %patch0 -p1
@@ -301,13 +292,17 @@ umask 022
 %gconf_schema_install gdm-simple-greeter.schemas
 %scrollkeeper_update_post
 %update_icon_cache hicolor
+NORESTART=1
+%systemd_post gdm.service
 
 %preun
 %gconf_schema_uninstall gdm-simple-greeter.schemas
+%systemd_preun gdm.service
 
 %postun
 %scrollkeeper_update_postun
 %update_icon_cache hicolor
+%systemd_reload
 
 if [ "$1" = "0" ]; then
 	%glib_compile_schemas
@@ -315,10 +310,11 @@ if [ "$1" = "0" ]; then
 	%groupremove xdm
 fi
 
-%triggerpostun -- %{name} < 1:2.13.0.8-1
+%triggerpostun -- %{name} < 2:3.2.1.1-10
 if [ -f /etc/X11/gdm/gdm.conf-custom.rpmsave ]; then
 	mv /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
 fi
+%systemd_trigger gdm.service
 
 %post init
 /sbin/chkconfig --add gdm
@@ -333,16 +329,6 @@ fi
 
 %post   libs -p /sbin/ldconfig
 %postun libs -p /sbin/ldconfig
-
-%post systemd
-NORESTART=1
-%systemd_post gdm.service
-
-%preun systemd
-%systemd_preun gdm.service
-
-%postun systemd
-%systemd_reload
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -405,6 +391,7 @@ NORESTART=1
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
 %{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
+%{systemdunitdir}/gdm.service
 
 %files libs
 %defattr(644,root,root,755)
@@ -440,7 +427,3 @@ NORESTART=1
 %files upstart
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf
-
-%files systemd
-%defattr(644,root,root,755)
-%{systemdunitdir}/gdm.service
