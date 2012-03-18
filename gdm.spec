@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	11
+Release:	12
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -28,7 +28,6 @@ Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
-Source8:	%{name}.service
 Source9:	%{name}.tmpfiles
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
@@ -98,6 +97,7 @@ Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
 Requires:	systemd-units >= 37-0.10
 Requires:	which
+Requires:	xinitrc-ng >= 1.0
 Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
 Suggests:	pam-pam_gnome_keyring
@@ -263,7 +263,7 @@ cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-cp -p %{SOURCE8} $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
+ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 install %{SOURCE9} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
