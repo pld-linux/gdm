@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	12
+Release:	13
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -293,12 +293,10 @@ umask 022
 %gconf_schema_install gdm-simple-greeter.schemas
 %scrollkeeper_update_post
 %update_icon_cache hicolor
-NORESTART=1
-%systemd_post gdm.service
+%systemd_reload
 
 %preun
 %gconf_schema_uninstall gdm-simple-greeter.schemas
-%systemd_preun gdm.service
 
 %postun
 %scrollkeeper_update_postun
@@ -315,7 +313,6 @@ fi
 if [ -f /etc/X11/gdm/gdm.conf-custom.rpmsave ]; then
 	mv /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
 fi
-%systemd_trigger gdm.service
 
 %post init
 /sbin/chkconfig --add gdm
