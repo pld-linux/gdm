@@ -1,0 +1,2 @@
+d /var/run/gdm 0711 root xdm -
+d /var/run/gdm/greeter 0755 xdm xdm -
