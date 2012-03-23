@@ -14,12 +14,12 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.2.1.1
-Release:	13
+Version:	3.3.92.1
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.2/%{name}-%{version}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.3/%{name}-%{version}.tar.xz
 # Source0-md5:	df3f38061066f5e0816676b4eef7854a
 Source1:	%{name}.pamd
 Source2:	%{name}.init
@@ -35,7 +35,6 @@ Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
 Patch4:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
-BuildRequires:	GConf2-devel >= 2.32.0
 BuildRequires:	accountsservice-devel >= 0.6.12
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
@@ -46,7 +45,7 @@ BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.28.0
+BuildRequires:	glib2-devel >= 1:2.30.0
 BuildRequires:	gnome-doc-utils
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
@@ -64,7 +63,6 @@ BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-BuildRequires:	scrollkeeper >= 0.1.4
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
@@ -75,9 +73,8 @@ BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xz
-Requires(post,postun):	/usr/bin/scrollkeeper-update
+Requires(post,postun):	glib2 >= 1:2.26.0
 Requires(post,postun):	gtk-update-icon-cache
-Requires(post,preun):	GConf2
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
@@ -290,16 +287,10 @@ umask 022
 
 %post
 %glib_compile_schemas
-%gconf_schema_install gdm-simple-greeter.schemas
-%scrollkeeper_update_post
 %update_icon_cache hicolor
 %systemd_reload
 
-%preun
-%gconf_schema_uninstall gdm-simple-greeter.schemas
-
 %postun
-%scrollkeeper_update_postun
 %update_icon_cache hicolor
 %systemd_reload
 
@@ -360,7 +351,6 @@ fi
 %dir %{_sysconfdir}/gdm/PostLogin
 %config %{_sysconfdir}/gdm/PostLogin/Default.sample
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
-%{_sysconfdir}/gconf/schemas/gdm-simple-greeter.schemas
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
@@ -371,9 +361,6 @@ fi
 %attr(1770,root,xdm) %dir /var/lib/gdm
 %dir /var/lib/gdm/.config
 %attr(755,xdm,xdm) %dir /var/lib/gdm/.config/dconf
-%attr(1750,root,xdm) %dir /var/lib/gdm/.gconf.mandatory
-%attr(1640,root,xdm) /var/lib/gdm/.gconf.mandatory/*.xml
-%attr(644,root,xdm) /var/lib/gdm/.gconf.path
 %attr(755,xdm,xdm) /var/lib/gdm/.local
 %attr(750,xdm,xdm) %dir /var/log/gdm
 %attr(711,root,xdm) %dir /var/run/gdm
