@@ -15,7 +15,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.2.1.1
-Release:	13
+Release:	14
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -389,7 +389,6 @@ fi
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
 %{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
-%{systemdunitdir}/gdm.service
 
 %files libs
 %defattr(644,root,root,755)
@@ -421,6 +420,7 @@ fi
 %files init
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
+%{systemdunitdir}/gdm.service
 
 %files upstart
 %defattr(644,root,root,755)
