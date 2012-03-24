@@ -5,6 +5,7 @@
 #
 # Conditiional build:
 %bcond_without	selinux	# without selinux
+%bcond_with	systemd # rely on systemd for session tracking instead of ConsoleKit
 
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
@@ -231,6 +232,7 @@ touch data/gdm.schemas.in.in
 	--disable-console-helper \
 	--disable-scrollkeeper \
 	--disable-silent-rules \
+	%{__with_without systemd systemd} \
 	--with-console-kit \
 	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
