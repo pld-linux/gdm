@@ -3,8 +3,9 @@
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
 # - check /etc/pam.d/gdm-autologin
 #
-# Conditiional build:
+# Conditional build:
 %bcond_without	selinux	# without selinux
+%bcond_with     systemd # rely on systemd for session tracking instead of ConsoleKit
 
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
@@ -14,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.2.1.1
-Release:	14
+Version:	3.4.0.1
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.2/%{name}-%{version}.tar.xz
-# Source0-md5:	df3f38061066f5e0816676b4eef7854a
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.4/%{name}-%{version}.tar.xz
+# Source0-md5:	7dedcccb5fee6f63224f5674920ef4af
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -35,7 +36,6 @@ Patch2:		%{name}-xsession.patch
 Patch3:		%{name}-defaults.patch
 Patch4:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
-BuildRequires:	GConf2-devel >= 2.32.0
 BuildRequires:	accountsservice-devel >= 0.6.12
 BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
@@ -46,7 +46,7 @@ BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.28.0
+BuildRequires:	glib2-devel >= 1:2.30.0
 BuildRequires:	gnome-doc-utils
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
@@ -64,7 +64,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	polkit-devel >= 0.93
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-BuildRequires:	scrollkeeper >= 0.1.4
+%{?with_systemd:BuildRequires:  systemd-devel}
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
@@ -75,9 +75,8 @@ BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xz
-Requires(post,postun):	/usr/bin/scrollkeeper-update
+Requires(post,postun):	glib2 >= 1:2.26.0
 Requires(post,postun):	gtk-update-icon-cache
-Requires(post,preun):	GConf2
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
@@ -90,8 +89,8 @@ Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
 Requires:	dbus-x11
 Requires:	gdm-wm >= 3.2.1
-Requires:	gnome-session >= 2.91.91.1
-Requires:	gnome-settings-daemon >= 2.91.91
+Requires:	gnome-session >= 3.0.0
+Requires:	gnome-settings-daemon >= 3.0.0
 Requires:	hicolor-icon-theme
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
@@ -234,6 +233,7 @@ touch data/gdm.schemas.in.in
 	--disable-console-helper \
 	--disable-scrollkeeper \
 	--disable-silent-rules \
+	%{__with_without systemd systemd} \
 	--with-console-kit \
 	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
@@ -251,11 +251,11 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
 	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
-	PAM_PREFIX=/etc
+	PAM_PREFIX=%{_sysconfdir}
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
@@ -264,7 +264,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
-install %{SOURCE9} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
@@ -290,16 +290,10 @@ umask 022
 
 %post
 %glib_compile_schemas
-%gconf_schema_install gdm-simple-greeter.schemas
-%scrollkeeper_update_post
 %update_icon_cache hicolor
 %systemd_reload
 
-%preun
-%gconf_schema_uninstall gdm-simple-greeter.schemas
-
 %postun
-%scrollkeeper_update_postun
 %update_icon_cache hicolor
 %systemd_reload
 
@@ -360,7 +354,6 @@ fi
 %dir %{_sysconfdir}/gdm/PostLogin
 %config %{_sysconfdir}/gdm/PostLogin/Default.sample
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
-%{_sysconfdir}/gconf/schemas/gdm-simple-greeter.schemas
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
@@ -371,15 +364,12 @@ fi
 %attr(1770,root,xdm) %dir /var/lib/gdm
 %dir /var/lib/gdm/.config
 %attr(755,xdm,xdm) %dir /var/lib/gdm/.config/dconf
-%attr(1750,root,xdm) %dir /var/lib/gdm/.gconf.mandatory
-%attr(1640,root,xdm) /var/lib/gdm/.gconf.mandatory/*.xml
-%attr(644,root,xdm) /var/lib/gdm/.gconf.path
 %attr(755,xdm,xdm) /var/lib/gdm/.local
 %attr(750,xdm,xdm) %dir /var/log/gdm
 %attr(711,root,xdm) %dir /var/run/gdm
 %attr(755,xdm,xdm) %dir /var/run/gdm/greeter
 %attr(750,xdm,xdm) /home/services/xdm
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 %{_pixmapsdir}/*
 %{_datadir}/gdm
 %{_datadir}/polkit-1/actions/gdm.policy
