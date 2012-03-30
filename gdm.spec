@@ -5,7 +5,7 @@
 #
 # Conditional build:
 %bcond_without	selinux	# without selinux
-%bcond_with     systemd # rely on systemd for session tracking instead of ConsoleKit
+%bcond_without  systemd # rely on systemd for session tracking instead of ConsoleKit
 
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
@@ -16,7 +16,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.4.0.1
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
