@@ -15,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.4.0.1
-Release:	2
+Version:	3.4.1
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.4/%{name}-%{version}.tar.xz
-# Source0-md5:	7dedcccb5fee6f63224f5674920ef4af
+# Source0-md5:	fda0470340f9c0bc2f8daccb280af520
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -85,7 +85,6 @@ Requires(pre):	/usr/sbin/useradd
 Requires(posttrans):	dconf
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/bin/X
-Requires:	ConsoleKit-x11 >= 0.4.1
 Requires:	accountsservice >= 0.6.12
 Requires:	dbus-x11
 Requires:	gdm-wm >= 3.2.1
@@ -99,6 +98,7 @@ Requires:	which
 Requires:	xinitrc-ng >= 1.0
 Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
+Suggests:	ConsoleKit-x11 >= 0.4.1
 Suggests:	pam-pam_gnome_keyring
 Suggests:	zenity
 Provides:	XDM
