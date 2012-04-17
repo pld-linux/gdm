@@ -16,7 +16,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.4.1
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -83,6 +83,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(posttrans):	dconf
+Requires(post,preun,postun):	systemd-units >= 38
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/bin/X
 Requires:	accountsservice >= 0.6.12
@@ -93,7 +94,7 @@ Requires:	gnome-settings-daemon >= 3.0.0
 Requires:	hicolor-icon-theme
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
-Requires:	systemd-units >= 37-0.10
+Requires:	systemd-units >= 38
 Requires:	which
 Requires:	xinitrc-ng >= 1.0
 Requires:	xorg-app-sessreg
