@@ -8,7 +8,7 @@ account		required	pam_nologin.so
 account		required	pam_access.so
 account		include		system-auth
 
-password	include		system-auth
+password	required	pam_deny.so
 
 session		optional	pam_keyinit.so force revoke
 session		optional	pam_console.so

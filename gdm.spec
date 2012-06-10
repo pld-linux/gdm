@@ -1,7 +1,8 @@
 #
 # TODO:
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
-# - check /etc/pam.d/gdm-autologin
+# - check all /etc/pam.d/gdm-* to be pldized:
+#   gdm[1] gdm-autologin[4] gdm-fingerprint[11] gdm-password[1] gdm-smartcard gdm-welcome
 #
 # Conditional build:
 %bcond_without	selinux	# without selinux
@@ -16,7 +17,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.4.1
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -30,6 +31,7 @@ Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
+Source10:	%{name}-fingerprint.pamd
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-polkit.patch
 Patch2:		%{name}-xsession.patch
@@ -260,6 +262,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
+cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
