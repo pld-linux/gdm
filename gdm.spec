@@ -233,6 +233,7 @@ touch data/gdm.schemas.in.in
 %{__autoconf}
 %{__automake}
 %configure \
+	%{?debug:--enable-debug} \
 	--disable-console-helper \
 	--disable-scrollkeeper \
 	--disable-silent-rules \
@@ -260,7 +261,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	DESTDIR=$RPM_BUILD_ROOT \
 	PAM_PREFIX=%{_sysconfdir}
 
-cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm
+%{__rm} $RPM_BUILD_ROOT/etc/pam.d/gdm
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
