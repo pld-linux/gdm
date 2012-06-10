@@ -2,7 +2,7 @@
 # TODO:
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
 # - check all /etc/pam.d/gdm-* to be pldized:
-#   gdm[1] gdm-autologin[4] gdm-fingerprint[11] gdm-password[1] gdm-smartcard gdm-welcome
+#   gdm-autologin[4] gdm-fingerprint[11] gdm-password[1] gdm-smartcard gdm-welcome
 #
 # Conditional build:
 %bcond_without	selinux	# without selinux
