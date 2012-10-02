@@ -5,7 +5,6 @@
 #   gdm-autologin[4] gdm-fingerprint[11] gdm-password[1] gdm-smartcard gdm-welcome
 #
 # Conditional build:
-%bcond_without	selinux	# without selinux
 %bcond_without  systemd # by default use systemd for session tracking instead of ConsoleKit (fallback to ConsoleKit on runtime)
 
 Summary:	GNOME Display Manager
@@ -16,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.4.1
-Release:	3
+Version:	3.6.0
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.4/%{name}-%{version}.tar.xz
-# Source0-md5:	fda0470340f9c0bc2f8daccb280af520
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.6/%{name}-%{version}.tar.xz
+# Source0-md5:	5a11f89761612e35cd326de347a97e14
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -33,37 +32,33 @@ Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
 Source10:	%{name}-fingerprint.pamd
 Patch0:		%{name}-xdmcp.patch
-Patch1:		%{name}-polkit.patch
-Patch2:		%{name}-xsession.patch
-Patch3:		%{name}-defaults.patch
-Patch4:		shell-check.patch
+Patch1:		%{name}-xsession.patch
+Patch2:		%{name}-defaults.patch
+Patch3:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
 BuildRequires:	accountsservice-devel >= 0.6.12
-BuildRequires:	attr-devel
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	check >= 0.9.4
 BuildRequires:	dbus-glib-devel >= 0.74
-BuildRequires:	docbook-dtd412-xml
 BuildRequires:	fontconfig-devel >= 2.5.0
-BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel >= 1:2.30.0
-BuildRequires:	gnome-doc-utils
+BuildRequires:	gettext-devel >= 0.17
+BuildRequires:	glib2-devel >= 1:2.33.2
+BuildRequires:	yelp-tools
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
-%{?with_selinux:BuildRequires:	libselinux-devel}
+BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
-BuildRequires:	libxklavier-devel >= 4.0-2
+BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	nss-devel >= 3.11.1
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel >= 1.3.0
-BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
-BuildRequires:	polkit-devel >= 0.93
+BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
 %{?with_systemd:BuildRequires:  systemd-devel}
@@ -76,8 +71,9 @@ BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xz
-Requires(post,postun):	glib2 >= 1:2.26.0
+Requires(post,postun):	glib2 >= 1:2.33.2
 Requires(post,postun):	gtk-update-icon-cache
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -221,7 +217,6 @@ Opis zadania Upstart dla GDM.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 touch data/gdm.schemas.in.in
@@ -235,20 +230,19 @@ touch data/gdm.schemas.in.in
 %configure \
 	%{?debug:--enable-debug} \
 	--disable-console-helper \
-	--disable-scrollkeeper \
 	--disable-silent-rules \
 	%{__with_without systemd systemd} \
 	--with-console-kit \
 	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
 	--with-tcp-wrappers=yes \
-	--with%{!?with_selinux:out}-selinux \
 	--with-xdmcp=yes \
 	--with-xinerama=yes \
 	--with-user=xdm \
-	--with-group=xdm
+	--with-group=xdm \
+	--enable-ipv6
 
-%{__make}
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -261,7 +255,6 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 	DESTDIR=$RPM_BUILD_ROOT \
 	PAM_PREFIX=%{_sysconfdir}
 
-%{__rm} $RPM_BUILD_ROOT/etc/pam.d/gdm
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
@@ -334,7 +327,6 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_sbindir}/gdm-binary
 %attr(755,root,root) %{_bindir}/gdm-screenshot
-%attr(755,root,root) %{_bindir}/gdmflexiserver
 %dir %{_libdir}/gdm
 %dir %{_libdir}/gdm/simple-greeter
 %dir %{_libdir}/gdm/simple-greeter/extensions
@@ -342,9 +334,7 @@ fi
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
 %attr(755,root,root) %{_libexecdir}/gdm-crash-logger
-%attr(755,root,root) %{_libexecdir}/gdm-factory-slave
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
-%attr(755,root,root) %{_libexecdir}/gdm-product-slave
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-simple-greeter
@@ -378,7 +368,6 @@ fi
 %{systemdtmpfilesdir}/%{name}.conf
 %{_pixmapsdir}/*
 %{_datadir}/gdm
-%{_datadir}/polkit-1/actions/gdm.policy
 %{_datadir}/gnome-session/sessions/gdm-fallback.session
 %{_datadir}/gnome-session/sessions/gdm-shell.session
 %{_datadir}/xsessions/custom.desktop
@@ -388,29 +377,30 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libgdmgreeter.so.1.0.0
-%attr(755,root,root) %ghost %{_libdir}/libgdmgreeter.so.1
+%attr(755,root,root) %{_libdir}/libgdm.so.1.0.0
+%attr(755,root,root) %ghost %{_libdir}/libgdm.so.1
 %attr(755,root,root) %{_libdir}/libgdmsimplegreeter.so.1.0.0
 %attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
-%{_libdir}/girepository-1.0/GdmGreeter-1.0.typelib
+%{_libdir}/girepository-1.0/Gdm-1.0.typelib
 
 %files devel
 %defattr(644,root,root,755)
 %dir %{_includedir}/gdm
-%dir %{_includedir}/gdm/greeter
-%{_includedir}/gdm/greeter/gdm-greeter-client.h
-%{_includedir}/gdm/greeter/gdm-greeter-sessions.h
+%{_includedir}/gdm/gdm-client-glue.h
+%{_includedir}/gdm/gdm-client.h
+%{_includedir}/gdm/gdm-sessions.h
+%{_includedir}/gdm/gdm-user-switching.h
 %dir %{_includedir}/gdm/simple-greeter
 %{_includedir}/gdm/simple-greeter/gdm-login-extension.h
-%{_pkgconfigdir}/gdmgreeter.pc
+%{_pkgconfigdir}/gdm.pc
 %{_pkgconfigdir}/gdmsimplegreeter.pc
-%{_libdir}/libgdmgreeter.so
+%{_libdir}/libgdm.so
 %{_libdir}/libgdmsimplegreeter.so
-%{_datadir}/gir-1.0/GdmGreeter-1.0.gir
+%{_datadir}/gir-1.0/Gdm-1.0.gir
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libgdmgreeter.a
+%{_libdir}/libgdm.a
 %{_libdir}/libgdmsimplegreeter.a
 
 %files init

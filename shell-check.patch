@@ -1,9 +1,9 @@
---- gdm-3.2.1.1/data/gdm-shell.session.in.wiget	2011-10-19 19:38:06.384218726 +0200
-+++ gdm-3.2.1.1/data/gdm-shell.session.in	2011-10-19 19:38:45.769335146 +0200
+--- gdm-3.6.0/data/gdm-shell.session.in.wiget	2012-10-02 21:48:15.748122800 +0200
++++ gdm-3.6.0/data/gdm-shell.session.in	2012-10-02 21:54:50.321443809 +0200
 @@ -1,5 +1,5 @@
  [GNOME Session]
  Name=Display Manager
  RequiredComponents=gnome-shell;gnome-settings-daemon;
--IsRunnableHelper=bash -c 'gnome-shell --help | grep -q gdm-mode && @libexecdir@/gnome-session-check-accelerated'
-+IsRunnableHelper=sh -c 'gnome-shell --help | grep -q gdm-mode && @libexecdir@/gnome-session-check-accelerated'
+-IsRunnableHelper=bash -c 'type -p gnome-shell >& /dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
++IsRunnableHelper=/bin/sh -c 'type -p gnome-shell >& /dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
  FallbackSession=gdm-fallback
