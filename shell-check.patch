@@ -5,5 +5,5 @@
  Name=Display Manager
  RequiredComponents=gnome-shell;gnome-settings-daemon;
 -IsRunnableHelper=bash -c 'type -p gnome-shell >& /dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
-+IsRunnableHelper=/bin/sh -c 'type -p gnome-shell 2>&1 /dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
++IsRunnableHelper=/bin/sh -c 'type -p gnome-shell 2>&1 >/dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
  FallbackSession=gdm-fallback
