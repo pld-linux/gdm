@@ -2,7 +2,7 @@
 # TODO:
 # - s=/dev/null=/home/services/xdm= in %%trigger for graceful upgrade from xdm/kdm/gdm 2.2
 # - check all /etc/pam.d/gdm-* to be pldized:
-#   gdm-autologin[4] gdm-fingerprint[11] gdm-password[1] gdm-smartcard gdm-welcome
+#   gdm-autologin[4] gdm-fingerprint[10] gdm-password[1] gdm-smartcard gdm-launch-environment[11]
 #
 # Conditional build:
 %bcond_without  systemd # by default use systemd for session tracking instead of ConsoleKit (fallback to ConsoleKit on runtime)
@@ -16,7 +16,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.6.0
-Release:	3
+Release:	4
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -31,6 +31,7 @@ Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
 Source10:	%{name}-fingerprint.pamd
+Source11:	gdm-launch-environment.pamd
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
@@ -258,6 +259,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
+cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/pam.d/gdm-launch-environment
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
