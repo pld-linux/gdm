@@ -1,14 +1,13 @@
-diff -urN gdm-2.20.0/configure.ac gdm-2.20.0.new/configure.ac
---- gdm-2.20.0/configure.ac	2007-09-17 16:46:22.000000000 +0200
-+++ gdm-2.20.0.new/configure.ac	2007-09-21 17:29:32.000000000 +0200
-@@ -1206,6 +1201,10 @@
-    X_SERVER="/usr/X11R6/bin/X"
-    X_CONFIG_OPTIONS="-audit 0"
+--- gdm-3.6.0/configure.ac.old	2012-10-09 16:20:23.603767954 +0200
++++ gdm-3.6.0/configure.ac	2012-10-09 16:23:22.486132194 +0200
+@@ -1273,6 +1273,10 @@ else
+    X_SERVER="/usr/bin/X"
  fi
+ 
 +X_PATH="/usr/bin"
 +X_SERVER_PATH="/usr/bin"
 +X_SERVER="/usr/bin/Xorg vt9"
-+X_CONFIG_OPTIONS="-audit 0"
- 
++
  dnl ---------------------------------------------------------------------------
  dnl - Check for Xnest / Xephyr support
+ dnl ---------------------------------------------------------------------------
