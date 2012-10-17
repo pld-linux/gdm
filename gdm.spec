@@ -15,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.6.0
-Release:	5
+Version:	3.6.1
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.6/%{name}-%{version}.tar.xz
-# Source0-md5:	5a11f89761612e35cd326de347a97e14
+# Source0-md5:	5f2ef52abd8ba9a1069d4eb401f99f48
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -31,7 +31,7 @@ Source6:	%{name}-default.desktop
 Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
 Source10:	%{name}-fingerprint.pamd
-Source11:	gdm-launch-environment.pamd
+Source11:	%{name}-launch-environment.pamd
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
@@ -46,7 +46,7 @@ BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel >= 0.17
 BuildRequires:	glib2-devel >= 1:2.33.2
-BuildRequires:	yelp-tools
+BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
@@ -54,7 +54,6 @@ BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
-BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	nss-devel >= 3.11.1
 BuildRequires:	pam-devel
 BuildRequires:	pango-devel >= 1.3.0
@@ -68,12 +67,13 @@ BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
+BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
-BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xz
+BuildRequires:	yelp-tools
 Requires(post,postun):	glib2 >= 1:2.33.2
 Requires(post,postun):	gtk-update-icon-cache
 Requires(postun):	/usr/sbin/groupdel
@@ -329,6 +329,7 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_sbindir}/gdm-binary
 %attr(755,root,root) %{_bindir}/gdm-screenshot
+%attr(755,root,root) %{_bindir}/gdmflexiserver
 %dir %{_libdir}/gdm
 %dir %{_libdir}/gdm/simple-greeter
 %dir %{_libdir}/gdm/simple-greeter/extensions
