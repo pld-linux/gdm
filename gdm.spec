@@ -15,13 +15,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.6.2
+Version:	3.8.0
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.6/%{name}-%{version}.tar.xz
-# Source0-md5:	b1924268d1515b8b947acbbe49d72292
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.8/%{name}-%{version}.tar.xz
+# Source0-md5:	58d910c1d4c225d2403a737f8fc55fd3
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -37,15 +37,18 @@ Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
 Patch3:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
+#
+%define		glib2_version 1:2.35.0
+#
 BuildRequires:	accountsservice-devel >= 0.6.12
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.11
-BuildRequires:	check >= 0.9.4
+BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	dbus-glib-devel >= 0.74
 BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel >= 0.17
-BuildRequires:	glib2-devel >= 1:2.33.2
+BuildRequires:	glib2-devel >= %{glib2_version}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
@@ -61,7 +64,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-%{?with_systemd:BuildRequires:  systemd-devel}
+%{?with_systemd:BuildRequires:	systemd-devel >= 186}
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
@@ -72,9 +75,10 @@ BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xorg-xserver-Xephyr
 BuildRequires:	xz
 BuildRequires:	yelp-tools
-Requires(post,postun):	glib2 >= 1:2.33.2
+Requires(post,postun):	glib2 >= %{glib2_version}
 Requires(post,postun):	gtk-update-icon-cache
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -87,6 +91,7 @@ Requires:	/usr/bin/X
 Requires:	accountsservice >= 0.6.12
 Requires:	dbus-x11
 Requires:	gdm-wm >= 3.2.1
+Requires:	glib2 >= %{glib2_version}
 Requires:	gnome-session >= 3.0.0
 Requires:	gnome-settings-daemon >= 3.0.0
 Requires:	hicolor-icon-theme
@@ -98,6 +103,7 @@ Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
 Suggests:	ConsoleKit-x11 >= 0.4.1
 Suggests:	pam-pam_gnome_keyring
+Suggests:	xorg-xserver-Xephyr
 Suggests:	zenity
 Provides:	XDM
 Provides:	group(xdm)
@@ -109,6 +115,7 @@ Obsoletes:	gnome-applet-fast-user-switch
 Conflicts:	gdkxft
 # sr@Latn vs. sr@latin
 Conflicts:	glibc-misc < 6:2.7
+Conflicts:	systemd < 186
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -229,6 +236,7 @@ touch data/gdm.schemas.in.in
 %{__autoconf}
 %{__automake}
 %configure \
+	SYSTEMD_X_SERVER=/lib/systemd/systemd-multi-seat-x \
 	%{?debug:--enable-debug} \
 	--disable-console-helper \
 	--disable-silent-rules \
@@ -327,7 +335,6 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_sbindir}/gdm
-%attr(755,root,root) %{_sbindir}/gdm-binary
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
 %dir %{_libdir}/gdm
@@ -336,7 +343,6 @@ fi
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libfingerprint.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
 %attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
-%attr(755,root,root) %{_libexecdir}/gdm-crash-logger
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser

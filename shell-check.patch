@@ -1,5 +1,5 @@
---- gdm-3.6.0/data/gdm-shell.session.in.wiget	2012-10-02 21:48:15.748122800 +0200
-+++ gdm-3.6.0/data/gdm-shell.session.in	2012-10-02 21:54:50.321443809 +0200
+--- gdm-3.8.0/data/gdm-shell-with-fallback.session.in.wiget	2013-03-27 21:51:33.323698132 +0100
++++ gdm-3.8.0/data/gdm-shell-with-fallback.session.in	2013-03-27 21:52:51.497070438 +0100
 @@ -1,5 +1,5 @@
  [GNOME Session]
  Name=Display Manager
