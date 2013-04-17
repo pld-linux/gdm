@@ -7,6 +7,7 @@
 # Conditional build:
 %bcond_without  systemd # by default use systemd for session tracking instead of ConsoleKit (fallback to ConsoleKit on runtime)
 
+%define		glib2_version 1:2.35.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -15,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.8.0
+Version:	3.8.1
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.8/%{name}-%{version}.tar.xz
-# Source0-md5:	58d910c1d4c225d2403a737f8fc55fd3
+# Source0-md5:	fbfe02e3eb744e3f898b11ad7a7d37d2
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -37,9 +38,6 @@ Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
 Patch3:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
-#
-%define		glib2_version 1:2.35.0
-#
 BuildRequires:	accountsservice-devel >= 0.6.12
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
