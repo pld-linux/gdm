@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.8.4
+Version:	3.10.0
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.8/%{name}-%{version}.tar.xz
-# Source0-md5:	e24ddcaa4802ee948109cde52f96989a
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.10/%{name}-%{version}.tar.xz
+# Source0-md5:	fe232e87c19164c98ecb004f626b070b
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -43,8 +43,6 @@ BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	check-devel >= 0.9.4
-BuildRequires:	dbus-glib-devel >= 0.74
-BuildRequires:	fontconfig-devel >= 2.5.0
 BuildRequires:	gettext-devel >= 0.17
 BuildRequires:	glib2-devel >= %{glib2_version}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
@@ -55,16 +53,13 @@ BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
-BuildRequires:	nss-devel >= 3.11.1
 BuildRequires:	pam-devel
-BuildRequires:	pango-devel >= 1.3.0
 BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
 %{?with_systemd:BuildRequires:	systemd-devel >= 186}
 BuildRequires:	tar >= 1:1.22
-BuildRequires:	upower-devel >= 0.9.0
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
@@ -222,7 +217,7 @@ Opis zadania Upstart dla GDM.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+#patch3 -p1
 
 %build
 touch data/gdm.schemas.in.in
@@ -280,8 +275,7 @@ touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/gdm/simple-greeter/extensions/*.{a,la} \
-    $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -335,19 +329,11 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
-%dir %{_libdir}/gdm
-%dir %{_libdir}/gdm/simple-greeter
-%dir %{_libdir}/gdm/simple-greeter/extensions
-%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libfingerprint.so
-%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libpassword.so
-%attr(755,root,root) %{_libdir}/gdm/simple-greeter/extensions/libsmartcard.so
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
-%attr(755,root,root) %{_libexecdir}/gdm-simple-greeter
 %attr(755,root,root) %{_libexecdir}/gdm-simple-slave
 %attr(755,root,root) %{_libexecdir}/gdm-xdmcp-chooser-slave
-%attr(755,root,root) %{_libexecdir}/gdm-smartcard-worker
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -363,7 +349,6 @@ fi
 %{_sysconfdir}/dconf/db/gdm.d
 %{_sysconfdir}/dconf/profile/gdm
 %attr(1755,root,xdm) %dir /var/cache/gdm
-%attr(1770,root,xdm) %dir /var/gdm
 %attr(1770,root,xdm) %dir /var/lib/gdm
 %dir /var/lib/gdm/.config
 %attr(755,xdm,xdm) %dir /var/lib/gdm/.config/dconf
@@ -375,7 +360,6 @@ fi
 %{systemdtmpfilesdir}/%{name}.conf
 %{_pixmapsdir}/*
 %{_datadir}/gdm
-%{_datadir}/gnome-session/sessions/gdm-fallback.session
 %{_datadir}/gnome-session/sessions/gdm-shell.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
@@ -386,8 +370,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgdm.so.1.0.0
 %attr(755,root,root) %ghost %{_libdir}/libgdm.so.1
-%attr(755,root,root) %{_libdir}/libgdmsimplegreeter.so.1.0.0
-%attr(755,root,root) %ghost %{_libdir}/libgdmsimplegreeter.so.1
 %{_libdir}/girepository-1.0/Gdm-1.0.typelib
 
 %files devel
@@ -397,18 +379,13 @@ fi
 %{_includedir}/gdm/gdm-client.h
 %{_includedir}/gdm/gdm-sessions.h
 %{_includedir}/gdm/gdm-user-switching.h
-%dir %{_includedir}/gdm/simple-greeter
-%{_includedir}/gdm/simple-greeter/gdm-login-extension.h
 %{_pkgconfigdir}/gdm.pc
-%{_pkgconfigdir}/gdmsimplegreeter.pc
 %{_libdir}/libgdm.so
-%{_libdir}/libgdmsimplegreeter.so
 %{_datadir}/gir-1.0/Gdm-1.0.gir
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgdm.a
-%{_libdir}/libgdmsimplegreeter.a
 
 %files init
 %defattr(644,root,root,755)
