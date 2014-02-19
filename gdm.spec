@@ -17,7 +17,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.10.0.1
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -289,13 +289,11 @@ umask 022
 %useradd -u 55 -r -d /home/services/xdm -s /bin/false -c "X Display Manager" -g xdm xdm
 
 %post
-%glib_compile_schemas
 %update_icon_cache hicolor
 
 %postun
 %update_icon_cache hicolor
 if [ "$1" = "0" ]; then
-	%glib_compile_schemas
 	%userremove xdm
 	%groupremove xdm
 fi
@@ -320,8 +318,15 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del gdm
 fi
 
-%post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post libs
+/sbin/ldconfig
+%glib_compile_schemas
+
+%postun libs
+/sbin/ldconfig
+if [ "$1" = "0" ]; then
+	%glib_compile_schemas
+fi
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -364,13 +369,13 @@ fi
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
-%{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgdm.so.1.0.0
 %attr(755,root,root) %ghost %{_libdir}/libgdm.so.1
 %{_libdir}/girepository-1.0/Gdm-1.0.typelib
+%{_datadir}/glib-2.0/schemas/org.gnome.login-screen.gschema.xml
 
 %files devel
 %defattr(644,root,root,755)
