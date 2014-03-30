@@ -7,7 +7,7 @@
 # Conditional build:
 %bcond_without  systemd # by default use systemd for session tracking instead of ConsoleKit (fallback to ConsoleKit on runtime)
 
-%define		glib2_version 1:2.35.0
+%define		glib2_version 1:2.36.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.10.0.1
-Release:	3
+Version:	3.12.0
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.10/%{name}-%{version}.tar.xz
-# Source0-md5:	010a8615d7ee99d59494641a7201957e
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.12/%{name}-%{version}.tar.xz
+# Source0-md5:	67922d0fecd9a5cad0601f9b93106f83
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -337,8 +337,6 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
-%attr(755,root,root) %{_libexecdir}/gdm-simple-slave
-%attr(755,root,root) %{_libexecdir}/gdm-xdmcp-chooser-slave
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -351,12 +349,9 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
-%{_sysconfdir}/dconf/db/gdm.d
-%{_sysconfdir}/dconf/profile/gdm
+%{_datadir}/dconf/profile/gdm
 %attr(1755,root,xdm) %dir /var/cache/gdm
 %attr(1770,root,xdm) %dir /var/lib/gdm
-%dir /var/lib/gdm/.config
-%attr(755,xdm,xdm) %dir /var/lib/gdm/.config/dconf
 %attr(755,xdm,xdm) /var/lib/gdm/.local
 %attr(750,xdm,xdm) %dir /var/log/gdm
 %attr(711,root,xdm) %dir /var/run/gdm
