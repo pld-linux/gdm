@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.12.0
+Version:	3.12.1
 Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.12/%{name}-%{version}.tar.xz
-# Source0-md5:	67922d0fecd9a5cad0601f9b93106f83
+# Source0-md5:	18807aeb082ac3d8def5bbddac9c620b
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
