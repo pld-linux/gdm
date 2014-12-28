@@ -43,7 +43,7 @@ BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	check-devel >= 0.9.4
-BuildRequires:	gettext-devel >= 0.17
+BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= %{glib2_version}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
