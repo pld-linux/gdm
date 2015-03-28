@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.14.1
-Release:	3
+Version:	3.16.0
+Release:	1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.14/%{name}-%{version}.tar.xz
-# Source0-md5:	6ebb3c1a694c58651f3e1116ff3f542d
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.16/%{name}-%{version}.tar.xz
+# Source0-md5:	aacdff89e695cb66c8d4a6ff0a00e293
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -67,7 +67,6 @@ BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-xserver-Xephyr
 BuildRequires:	xz
 BuildRequires:	yelp-tools
@@ -265,7 +264,7 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
-install %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
@@ -337,6 +336,8 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
+%attr(755,root,root) %{_libdir}/gdm-wayland-session
+%attr(755,root,root) %{_libdir}/gdm-x-session
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -360,7 +361,6 @@ fi
 %{systemdtmpfilesdir}/%{name}.conf
 %{_pixmapsdir}/*
 %{_datadir}/gdm
-%{_datadir}/gnome-session/sessions/gdm-shell.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*/apps/*.png
