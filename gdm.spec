@@ -29,7 +29,6 @@ Source3:	%{name}-pld-logo.png
 Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
-Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
 Source10:	%{name}-fingerprint.pamd
 Source11:	%{name}-launch-environment.pamd
@@ -198,19 +197,6 @@ Init script for GDM.
 %description init -l pl.UTF-8
 Skrypt init dla GDM-a.
 
-%package upstart
-Summary:	Upstart job description for GDM
-Summary(pl.UTF-8):	Opis zadania Upstart dla GDM
-Group:		Daemons
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	upstart >= 0.6
-
-%description upstart
-Upstart job description for GDM.
-
-%description upstart -l pl.UTF-8
-Opis zadania Upstart dla GDM.
-
 %prep
 %setup -q
 %patch0 -p1
@@ -247,7 +233,7 @@ touch data/gdm.schemas.in.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
 	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
@@ -261,7 +247,6 @@ cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/pam.d/gdm-launch-environment
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
-cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
@@ -391,7 +376,3 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
 %{systemdunitdir}/gdm.service
-
-%files upstart
-%defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf

@@ -14,8 +14,6 @@
 
 . /etc/rc.d/init.d/functions
 
-upstart_controlled
-
 # Get service config
 if [ -f /etc/sysconfig/gdm ]; then
 	. /etc/sysconfig/gdm
