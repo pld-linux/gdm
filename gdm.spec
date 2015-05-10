@@ -17,7 +17,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.14.1
-Release:	4
+Release:	5
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -234,7 +234,7 @@ touch data/gdm.schemas.in.in
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security,init} \
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
 	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
@@ -248,7 +248,6 @@ cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
 cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/pam.d/gdm-launch-environment
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
-cp -p %{SOURCE7} $RPM_BUILD_ROOT/etc/init/%{name}.conf
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
 ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 install %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
