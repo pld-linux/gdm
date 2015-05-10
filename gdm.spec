@@ -17,7 +17,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.14.1
-Release:	3
+Release:	4
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
@@ -29,7 +29,6 @@ Source3:	%{name}-pld-logo.png
 Source4:	%{name}-autologin.pamd
 Source5:	%{name}-custom.desktop
 Source6:	%{name}-default.desktop
-Source7:	%{name}.upstart
 Source9:	%{name}.tmpfiles
 Source10:	%{name}-fingerprint.pamd
 Source11:	%{name}-launch-environment.pamd
@@ -198,19 +197,6 @@ Init script for GDM.
 
 %description init -l pl.UTF-8
 Skrypt init dla GDM-a.
-
-%package upstart
-Summary:	Upstart job description for GDM
-Summary(pl.UTF-8):	Opis zadania Upstart dla GDM
-Group:		Daemons
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	upstart >= 0.6
-
-%description upstart
-Upstart job description for GDM.
-
-%description upstart -l pl.UTF-8
-Opis zadania Upstart dla GDM.
 
 %prep
 %setup -q
@@ -391,7 +377,3 @@ fi
 %defattr(644,root,root,755)
 %attr(754,root,root) /etc/rc.d/init.d/gdm
 %{systemdunitdir}/gdm.service
-
-%files upstart
-%defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/init/%{name}.conf
