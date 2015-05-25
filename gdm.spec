@@ -57,7 +57,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-%{?with_systemd:BuildRequires:	systemd-devel >= 186}
+%{?with_systemd:BuildRequires:	systemd-devel >= 1:186}
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -332,8 +332,8 @@ fi
 %dir %{_sysconfdir}/gdm/PostLogin
 %config %{_sysconfdir}/gdm/PostLogin/Default.sample
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/*
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm*
+%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/gdm.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm-*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
 %{_datadir}/dconf/profile/gdm
 %attr(1755,root,xdm) %dir /var/cache/gdm
@@ -344,11 +344,13 @@ fi
 %attr(755,xdm,xdm) %dir /var/run/gdm/greeter
 %attr(750,xdm,xdm) /home/services/xdm
 %{systemdtmpfilesdir}/%{name}.conf
-%{_pixmapsdir}/*
+%{_pixmapsdir}/gdm*.png
+%{_pixmapsdir}/nobody.png
+%{_pixmapsdir}/nohost.png
 %{_datadir}/gdm
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
-%{_iconsdir}/hicolor/*/apps/*.png
+%{_iconsdir}/hicolor/*x*/apps/gdm-*.png
 
 %files libs
 %defattr(644,root,root,755)
@@ -359,13 +361,13 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libgdm.so
 %dir %{_includedir}/gdm
 %{_includedir}/gdm/gdm-client-glue.h
 %{_includedir}/gdm/gdm-client.h
 %{_includedir}/gdm/gdm-sessions.h
 %{_includedir}/gdm/gdm-user-switching.h
 %{_pkgconfigdir}/gdm.pc
-%{_libdir}/libgdm.so
 %{_datadir}/gir-1.0/Gdm-1.0.gir
 
 %files static
