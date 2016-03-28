@@ -6,7 +6,7 @@
  
 +X_PATH="/usr/bin"
 +X_SERVER_PATH="/usr/bin"
-+X_SERVER="/usr/bin/Xorg vt9"
++X_SERVER="/usr/bin/X"
 +
  dnl ---------------------------------------------------------------------------
  dnl - Check for Xnest / Xephyr support

@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.16.1.1
-Release:	1
+Version:	3.20.0
+Release:	0.1
 Epoch:		2
 License:	GPL/LGPL
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.16/%{name}-%{version}.tar.xz
-# Source0-md5:	0b315af5fe0ee66055edb6f301510820
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.20/%{name}-%{version}.tar.xz
+# Source0-md5:	e3fa034ca4040a6db4f09eee93a2ea43
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -217,8 +217,10 @@ touch data/gdm.schemas.in.in
 	SYSTEMD_X_SERVER=/lib/systemd/systemd-multi-seat-x \
 	%{?debug:--enable-debug} \
 	--disable-console-helper \
+	--enable-gdm-xsession \
 	--disable-silent-rules \
 	%{__with_without systemd systemd} \
+	--with-initial-vt=9 \
 	--with-console-kit \
 	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
@@ -331,7 +333,7 @@ fi
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Xsession
 %dir %{_sysconfdir}/gdm/PostLogin
 %config %{_sysconfdir}/gdm/PostLogin/Default.sample
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
+%attr(640,root,xdm) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/gdm/custom.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.d/gdm.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm-*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
