@@ -4,9 +4,6 @@
 # - check all /etc/pam.d/gdm-* to be pldized:
 #   gdm-autologin[4] gdm-fingerprint[10] gdm-password[1] gdm-smartcard gdm-launch-environment[11]
 #
-# Conditional build:
-%bcond_without  systemd # by default use systemd for session tracking instead of ConsoleKit (fallback to ConsoleKit on runtime)
-
 %define		glib2_version 1:2.36.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
@@ -16,13 +13,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.20.0
+Version:	3.20.1
 Release:	0.1
 Epoch:		2
-License:	GPL/LGPL
+License:	GPL v2+
 Group:		X11/Applications
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.20/%{name}-%{version}.tar.xz
-# Source0-md5:	e3fa034ca4040a6db4f09eee93a2ea43
+# Source0-md5:	5ce6722e298aae7e18d5007be9c2a4fb
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -57,7 +54,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-%{?with_systemd:BuildRequires:	systemd-devel >= 1:186}
+BuildRequires:	systemd-devel >= 1:186
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -66,7 +63,10 @@ BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
+# for Xephyr vs Xnest detection
 BuildRequires:	xorg-xserver-Xephyr
+# for "XServer disables tcp access by default" detection
+BuildRequires:	xorg-xserver-server-devel
 BuildRequires:	xz
 BuildRequires:	yelp-tools
 Requires(post,postun):	glib2 >= %{glib2_version}
@@ -219,9 +219,7 @@ touch data/gdm.schemas.in.in
 	--disable-console-helper \
 	--enable-gdm-xsession \
 	--disable-silent-rules \
-	%{__with_without systemd systemd} \
 	--with-initial-vt=9 \
-	--with-console-kit \
 	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
 	--with-tcp-wrappers=yes \
