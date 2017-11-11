@@ -13,13 +13,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.20.1
+Version:	3.26.2.1
 Release:	0.1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.20/%{name}-%{version}.tar.xz
-# Source0-md5:	5ce6722e298aae7e18d5007be9c2a4fb
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.26/%{name}-%{version}.tar.xz
+# Source0-md5:	a1c4bb747ac0fc9440ca29d111e9c0c4
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -34,10 +34,10 @@ Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
 Patch3:		shell-check.patch
 URL:		http://www.gnome.org/projects/gdm/
-BuildRequires:	accountsservice-devel >= 0.6.12
+BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	automake >= 1:1.11.2
 BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= %{glib2_version}
@@ -45,16 +45,19 @@ BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
+BuildRequires:	keyutils-devel
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libselinux-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
+BuildRequires:	libxcb-devel
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.627
-BuildRequires:	systemd-devel >= 1:186
+BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
@@ -79,12 +82,12 @@ Requires(pre):	/usr/sbin/useradd
 Requires(posttrans):	dconf
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	/usr/bin/X
-Requires:	accountsservice >= 0.6.12
+Requires:	accountsservice >= 0.6.35
 Requires:	dbus-x11
 Requires:	gdm-wm >= 3.2.1
 Requires:	glib2 >= %{glib2_version}
-Requires:	gnome-session >= 3.0.0
-Requires:	gnome-settings-daemon >= 3.0.0
+Requires:	gnome-session >= 3.26.0
+Requires:	gnome-settings-daemon >= 3.26.0
 Requires:	hicolor-icon-theme
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
@@ -215,19 +218,20 @@ touch data/gdm.schemas.in.in
 %{__automake}
 %configure \
 	SYSTEMD_X_SERVER=/lib/systemd/systemd-multi-seat-x \
-	%{?debug:--enable-debug} \
+	--enable-authentication-scheme=pam \
 	--disable-console-helper \
+	%{?debug:--enable-debug} \
 	--enable-gdm-xsession \
+	--enable-ipv6 \
 	--disable-silent-rules \
 	--with-initial-vt=9 \
-	--enable-authentication-scheme=pam \
 	--with-pam-prefix=/etc \
-	--with-tcp-wrappers=yes \
-	--with-xdmcp=yes \
-	--with-xinerama=yes \
-	--with-user=xdm \
+	--with-pam-mod-dir=/%{_lib}/security \
+	--with-tcp-wrappers \
+	--with-xdmcp \
+	--with-xinerama \
 	--with-group=xdm \
-	--enable-ipv6
+	--with-user=xdm
 
 %{__make} -j1
 
@@ -248,10 +252,15 @@ cp -p %{SOURCE4} $RPM_BUILD_ROOT/etc/pam.d/gdm-autologin
 cp -p %{SOURCE11} $RPM_BUILD_ROOT/etc/pam.d/gdm-launch-environment
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/gdm
 cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_pixmapsdir}
-ln -s /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 cp -p %{SOURCE9} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
+# replace file with mask (to allow choosing via prefdm.service)
+ln -sf /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
+
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
+
+# not supported by glibc
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/kab
 
 %find_lang %{name} --with-gnome --with-omf --all-name
 
@@ -259,7 +268,8 @@ touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
 
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la \
+	$RPM_BUILD_ROOT/%{_lib}/security/pam_gdm.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -323,6 +333,7 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
 %attr(755,root,root) %{_libdir}/gdm-wayland-session
 %attr(755,root,root) %{_libdir}/gdm-x-session
+%attr(755,root,root) /%{_lib}/security/pam_gdm.so
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -348,6 +359,7 @@ fi
 %{_pixmapsdir}/nobody.png
 %{_pixmapsdir}/nohost.png
 %{_datadir}/gdm
+%{_datadir}/gnome-session/sessions/gnome-login.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
 %{_iconsdir}/hicolor/*x*/apps/gdm-*.png
@@ -365,9 +377,11 @@ fi
 %dir %{_includedir}/gdm
 %{_includedir}/gdm/gdm-client-glue.h
 %{_includedir}/gdm/gdm-client.h
+%{_includedir}/gdm/gdm-pam-extensions.h
 %{_includedir}/gdm/gdm-sessions.h
 %{_includedir}/gdm/gdm-user-switching.h
 %{_pkgconfigdir}/gdm.pc
+%{_pkgconfigdir}/gdm-pam-extensions.pc
 %{_datadir}/gir-1.0/Gdm-1.0.gir
 
 %files static
