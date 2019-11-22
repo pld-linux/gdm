@@ -14,7 +14,7 @@ Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
 Version:	3.34.1
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
@@ -322,8 +322,8 @@ fi
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
-%attr(755,root,root) %{_libdir}/gdm-wayland-session
-%attr(755,root,root) %{_libdir}/gdm-x-session
+%attr(755,root,root) %{_libexecdir}/gdm-wayland-session
+%attr(755,root,root) %{_libexecdir}/gdm-x-session
 %attr(755,root,root) /%{_lib}/security/pam_gdm.so
 /lib/udev/rules.d/61-gdm.rules
 %dir %{_sysconfdir}/gdm
