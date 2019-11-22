@@ -4,7 +4,7 @@
 # - check all /etc/pam.d/gdm-* to be pldized:
 #   gdm-autologin[4] gdm-fingerprint[10] gdm-password[1] gdm-smartcard gdm-launch-environment[11]
 #
-%define		glib2_version 1:2.36.0
+%define		glib2_version 1:2.44.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -13,13 +13,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.26.2.1
-Release:	0.1
+Version:	3.34.1
+Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.26/%{name}-%{version}.tar.xz
-# Source0-md5:	a1c4bb747ac0fc9440ca29d111e9c0c4
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.34/%{name}-%{version}.tar.xz
+# Source0-md5:	65d1fd4bb85e8b133d1cbffb80ecf62e
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -32,18 +32,16 @@ Source11:	%{name}-launch-environment.pamd
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
-Patch3:		shell-check.patch
-URL:		http://www.gnome.org/projects/gdm/
+URL:		https://wiki.gnome.org/Projects/GDM
 BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.11.2
 BuildRequires:	check-devel >= 0.9.4
-BuildRequires:	gettext-tools >= 0.17
+BuildRequires:	gettext-tools >= 0.19.8
 BuildRequires:	glib2-devel >= %{glib2_version}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
-BuildRequires:	intltool >= 0.40.0
 BuildRequires:	iso-codes
 BuildRequires:	keyutils-devel
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
@@ -66,8 +64,6 @@ BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
-# for Xephyr vs Xnest detection
-BuildRequires:	xorg-xserver-Xephyr
 # for "XServer disables tcp access by default" detection
 BuildRequires:	xorg-xserver-server-devel
 BuildRequires:	xz
@@ -89,6 +85,8 @@ Requires:	glib2 >= %{glib2_version}
 Requires:	gnome-session >= 3.26.0
 Requires:	gnome-settings-daemon >= 3.26.0
 Requires:	hicolor-icon-theme
+Requires:	iso-codes
+Requires:	libcanberra-gtk3 >= 0.4
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
 Requires:	which
@@ -107,8 +105,6 @@ Obsoletes:	gdm-systemd
 Obsoletes:	gdm-user-switch-applet
 Obsoletes:	gnome-applet-fast-user-switch
 Conflicts:	gdkxft
-# sr@Latn vs. sr@latin
-Conflicts:	glibc-misc < 6:2.7
 Conflicts:	systemd < 186
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -205,16 +201,13 @@ Skrypt init dla GDM-a.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-#patch3 -p1
 
 %build
 touch data/gdm.schemas.in.in
 %{__libtoolize}
-%{__glib_gettextize}
-%{__intltoolize}
-%{__aclocal}
-%{__autoheader}
+%{__aclocal} -I m4
 %{__autoconf}
+%{__autoheader}
 %{__automake}
 %configure \
 	SYSTEMD_X_SERVER=/lib/systemd/systemd-multi-seat-x \
@@ -239,7 +232,7 @@ touch data/gdm.schemas.in.in
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
 	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
-	$RPM_BUILD_ROOT{%{_datadir}/xsessions,%{systemdunitdir}} \
+	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_datadir}/xsessions,%{systemdunitdir}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
@@ -259,10 +252,7 @@ ln -sf /dev/null $RPM_BUILD_ROOT%{systemdunitdir}/gdm.service
 
 touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 
-# not supported by glibc
-%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/kab
-
-%find_lang %{name} --with-gnome --with-omf --all-name
+%find_lang %{name} --with-gnome
 
 # allow executing ~/.Xclients and ~/.xsession
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
@@ -324,16 +314,18 @@ fi
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README TODO
+%doc AUTHORS MAINTAINERS NEWS README.md
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
+%attr(755,root,root) %{_libexecdir}/gdm-disable-wayland
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
 %attr(755,root,root) %{_libdir}/gdm-wayland-session
 %attr(755,root,root) %{_libdir}/gdm-x-session
 %attr(755,root,root) /%{_lib}/security/pam_gdm.so
+/lib/udev/rules.d/61-gdm.rules
 %dir %{_sysconfdir}/gdm
 %dir %{_sysconfdir}/gdm/Init
 %attr(755,root,root) %config %{_sysconfdir}/gdm/Init/Default
@@ -355,14 +347,11 @@ fi
 %attr(755,xdm,xdm) %dir /var/run/gdm/greeter
 %attr(750,xdm,xdm) /home/services/xdm
 %{systemdtmpfilesdir}/%{name}.conf
-%{_pixmapsdir}/gdm*.png
-%{_pixmapsdir}/nobody.png
-%{_pixmapsdir}/nohost.png
+%{_pixmapsdir}/gdm-pld-logo.png
 %{_datadir}/gdm
 %{_datadir}/gnome-session/sessions/gnome-login.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
-%{_iconsdir}/hicolor/*x*/apps/gdm-*.png
 
 %files libs
 %defattr(644,root,root,755)

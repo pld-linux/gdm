@@ -1,9 +1,0 @@
---- gdm-3.8.0/data/gdm-shell-with-fallback.session.in.wiget	2013-03-27 21:51:33.323698132 +0100
-+++ gdm-3.8.0/data/gdm-shell-with-fallback.session.in	2013-03-27 21:52:51.497070438 +0100
-@@ -1,5 +1,5 @@
- [GNOME Session]
- Name=Display Manager
- RequiredComponents=gnome-shell;gnome-settings-daemon;
--IsRunnableHelper=bash -c 'type -p gnome-shell >& /dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
-+IsRunnableHelper=/bin/sh -c 'type -p gnome-shell 2>&1 >/dev/null && @CHECK_ACCELERATED_DIR@/gnome-session-check-accelerated'
- FallbackSession=gdm-fallback
