@@ -13,13 +13,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.34.1
-Release:	2
+Version:	3.36.3
+Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.34/%{name}-%{version}.tar.xz
-# Source0-md5:	65d1fd4bb85e8b133d1cbffb80ecf62e
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.36/%{name}-%{version}.tar.xz
+# Source0-md5:	2fb78422269f5e75067024ce5386521c
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -43,7 +43,7 @@ BuildRequires:	glib2-devel >= %{glib2_version}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	iso-codes
-BuildRequires:	keyutils-devel
+BuildRequires:	keyutils-devel >= 1.6
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libselinux-devel
 BuildRequires:	libstdc++-devel
