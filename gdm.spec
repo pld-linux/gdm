@@ -4,6 +4,9 @@
 # - check all /etc/pam.d/gdm-* to be pldized:
 #   gdm-autologin[4] gdm-fingerprint[10] gdm-password[1] gdm-smartcard gdm-launch-environment[11]
 #
+# Conditional build:
+%bcond_without	static_libs	# static library
+
 %define		glib2_version 1:2.44.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
@@ -13,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.36.3
+Version:	3.38.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.36/%{name}-%{version}.tar.xz
-# Source0-md5:	2fb78422269f5e75067024ce5386521c
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/gdm/3.38/%{name}-%{version}.tar.xz
+# Source0-md5:	948dec80099d9d3a2adacc5788964043
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -32,11 +35,10 @@ Source11:	%{name}-launch-environment.pamd
 Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
+Patch3:		%{name}-both-libraries.patch
 URL:		https://wiki.gnome.org/Projects/GDM
 BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
-BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake >= 1:1.11.2
 BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	gettext-tools >= 0.19.8
 BuildRequires:	glib2-devel >= %{glib2_version}
@@ -47,14 +49,15 @@ BuildRequires:	keyutils-devel >= 1.6
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libselinux-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
 BuildRequires:	libwrap-devel
 BuildRequires:	libxcb-devel
+BuildRequires:	meson >= 0.50
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.627
+BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
@@ -142,6 +145,23 @@ GDM (GNOME Display Manager) - це реімплементація xdm (X Display
 Manager). GDM дозволяє вам входити в систему, на якій запущено X
 Window та підтримує роботу кількох різних X сеансів одночасно.
 
+%package init
+Summary:	Init script for GDM
+Summary(pl.UTF-8):	Skrypt init dla GDM-a
+Group:		X11/Applications
+Requires(post,preun):	/sbin/chkconfig
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	open
+Requires:	rc-scripts >= 0.4.3.0
+Requires:	systemd-units >= 38
+
+%description init
+Init script for GDM.
+
+%description init -l pl.UTF-8
+Skrypt init dla GDM-a.
+
 %package libs
 Summary:	GDM libraries
 Summary(pl.UTF-8):	Biblioteki GDM
@@ -179,65 +199,36 @@ This package contains static libraries for GDM.
 %description static -l pl.UTF-8
 Pakiet zawiera statyczne biblioteki GDM.
 
-%package init
-Summary:	Init script for GDM
-Summary(pl.UTF-8):	Skrypt init dla GDM-a
-Group:		X11/Applications
-Requires(post,preun):	/sbin/chkconfig
-Requires(post,preun,postun):	systemd-units >= 38
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	open
-Requires:	rc-scripts >= 0.4.3.0
-Requires:	systemd-units >= 38
-
-%description init
-Init script for GDM.
-
-%description init -l pl.UTF-8
-Skrypt init dla GDM-a.
-
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
-touch data/gdm.schemas.in.in
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	SYSTEMD_X_SERVER=/lib/systemd/systemd-multi-seat-x \
-	--enable-authentication-scheme=pam \
-	--disable-console-helper \
-	%{?debug:--enable-debug} \
-	--enable-gdm-xsession \
-	--enable-ipv6 \
-	--disable-silent-rules \
-	--with-initial-vt=9 \
-	--with-pam-prefix=/etc \
-	--with-pam-mod-dir=/%{_lib}/security \
-	--with-tcp-wrappers \
-	--with-xdmcp \
-	--with-xinerama \
-	--with-group=xdm \
-	--with-user=xdm
+%meson build \
+	%{!?with_static_libs:--default-library=shared} \
+	-Dgdm-xsession=true \
+	-Dgroup=xdm \
+	-Dinitial-vt=9 \
+	-Dipv6=true \
+	-Dpam-mod-dir=/%{_lib}/security \
+	-Dpam-prefix=/etc \
+	-Dtcp-wrappers=true \
+	-Dudev-dir=/lib/udev/rules.d \
+	-Duser=xdm
 
-%{__make} -j1
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
-	$RPM_BUILD_ROOT{/home/services/xdm,/var/log/gdm} \
+	$RPM_BUILD_ROOT{/home/services/xdm,/var/lib/gdm/.local,/var/log/gdm,/var/run/gdm/greeter} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_datadir}/xsessions,%{systemdunitdir}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	PAM_PREFIX=%{_sysconfdir}
+%ninja_install -C build
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
@@ -257,9 +248,6 @@ touch $RPM_BUILD_ROOT/etc/security/blacklist.gdm
 # allow executing ~/.Xclients and ~/.xsession
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/xsessions/custom.desktop
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{_datadir}/xsessions/default.desktop
-
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la \
-	$RPM_BUILD_ROOT/%{_lib}/security/pam_gdm.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -284,7 +272,7 @@ fi
 
 %triggerpostun -- %{name} < 2:3.2.1.1-10
 if [ -f /etc/X11/gdm/gdm.conf-custom.rpmsave ]; then
-	mv /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
+	mv -f /etc/X11/gdm/gdm.conf-custom.rpmsave /etc/gdm/custom.conf
 fi
 
 %post init
@@ -339,7 +327,8 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm-*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
 %{_datadir}/dconf/profile/gdm
-%attr(1755,root,xdm) %dir /var/cache/gdm
+%dir %{systemduserunitdir}/gnome-session@gnome-login.target.d
+%{systemduserunitdir}/gnome-session@gnome-login.target.d/session.conf
 %attr(1770,root,xdm) %dir /var/lib/gdm
 %attr(755,xdm,xdm) /var/lib/gdm/.local
 %attr(750,xdm,xdm) %dir /var/log/gdm
@@ -352,6 +341,11 @@ fi
 %{_datadir}/gnome-session/sessions/gnome-login.session
 %{_datadir}/xsessions/custom.desktop
 %{_datadir}/xsessions/default.desktop
+
+%files init
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/gdm
+%{systemdunitdir}/gdm.service
 
 %files libs
 %defattr(644,root,root,755)
@@ -376,8 +370,3 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgdm.a
-
-%files init
-%defattr(644,root,root,755)
-%attr(754,root,root) /etc/rc.d/init.d/gdm
-%{systemdunitdir}/gdm.service

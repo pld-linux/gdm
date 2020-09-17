@@ -1,13 +1,28 @@
---- gdm-3.6.0/configure.ac.old	2012-10-09 16:20:23.603767954 +0200
-+++ gdm-3.6.0/configure.ac	2012-10-09 16:23:22.486132194 +0200
-@@ -1273,6 +1273,10 @@ else
-    X_SERVER="/usr/bin/X"
- fi
- 
-+X_PATH="/usr/bin"
-+X_SERVER_PATH="/usr/bin"
-+X_SERVER="/usr/bin/X"
-+
- dnl ---------------------------------------------------------------------------
- dnl - Check for Xnest / Xephyr support
- dnl ---------------------------------------------------------------------------
+--- gdm-3.38.0/meson.build.orig	2020-09-11 22:34:27.208127000 +0200
++++ gdm-3.38.0/meson.build	2020-09-17 20:33:51.861967317 +0200
+@@ -70,23 +70,8 @@
+     dependency('xau'),
+   ],
+ )
+-find_x_server_script = find_program('build-aux/find-x-server.sh', native: true)
+-find_x_server_out = run_command(find_x_server_script).stdout().strip()
+-if find_x_server_out != ''
+-  x_bin = find_x_server_out
+-  x_bin_path_split = x_bin.split('/')
+-  i = 0
+-  x_path = '/'
+-  foreach dir : x_bin_path_split
+-    if i < x_bin_path_split.length() - 1
+-      x_path = x_path / dir
+-    endif
+-    i = i + 1
+-  endforeach
+-else
+-  # what to do, what to do, this is wrong, but this just sets the
+-  # defaults, perhaps this user is cross compiling or some such
+-  x_path = '/usr/bin/X11:/usr/X11R6/bin:/opt/X11R6/bin'
++if true
++  x_path = '/usr/bin'
+   x_bin = '/usr/bin/X'
+ endif
+ xdmcp_dep = cc.find_library('Xdmcp', required: get_option('xdmcp'))

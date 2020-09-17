@@ -1,0 +1,11 @@
+--- gdm-3.38.0/pam_gdm/meson.build.orig	2020-09-11 22:34:27.208127000 +0200
++++ gdm-3.38.0/pam_gdm/meson.build	2020-09-17 20:27:54.923901016 +0200
+@@ -6,7 +6,7 @@
+   pam_gdm_deps += keyutils_dep
+ endif
+ 
+-pam_gdm = library('pam_gdm',
++pam_gdm = shared_library('pam_gdm',
+   'pam_gdm.c',
+   dependencies: pam_gdm_deps,
+   include_directories: config_h_dir,
