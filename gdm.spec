@@ -7,7 +7,7 @@
 # Conditional build:
 %bcond_without	static_libs	# static library
 
-%define		glib2_version 1:2.44.0
+%define		glib2_ver	1:2.56.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	3.38.2.1
+Version:	40.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/3.38/%{name}-%{version}.tar.xz
-# Source0-md5:	ddc782eaf0b0345ee34fb396f67bd44d
+Source0:	https://download.gnome.org/sources/gdm/40/%{name}-%{version}.tar.xz
+# Source0-md5:	85e6a306f1d0c88c276938a0519d8332
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -41,7 +41,7 @@ BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
 BuildRequires:	check-devel >= 0.9.4
 BuildRequires:	gettext-tools >= 0.19.8
-BuildRequires:	glib2-devel >= %{glib2_version}
+BuildRequires:	glib2-devel >= %{glib2_ver}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	iso-codes
@@ -71,7 +71,7 @@ BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-xserver-server-devel
 BuildRequires:	xz
 BuildRequires:	yelp-tools
-Requires(post,postun):	glib2 >= %{glib2_version}
+Requires(post,postun):	glib2 >= %{glib2_ver}
 Requires(post,postun):	gtk-update-icon-cache
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -84,7 +84,7 @@ Requires:	/usr/bin/X
 Requires:	accountsservice >= 0.6.35
 Requires:	dbus-x11
 Requires:	gdm-wm >= 3.2.1
-Requires:	glib2 >= %{glib2_version}
+Requires:	glib2 >= %{glib2_ver}
 Requires:	gnome-session >= 3.26.0
 Requires:	gnome-settings-daemon >= 3.26.0
 Requires:	hicolor-icon-theme
@@ -103,10 +103,11 @@ Suggests:	zenity
 Provides:	XDM
 Provides:	group(xdm)
 Provides:	user(xdm)
-Obsoletes:	gdm-Xnest
-Obsoletes:	gdm-systemd
-Obsoletes:	gdm-user-switch-applet
-Obsoletes:	gnome-applet-fast-user-switch
+Obsoletes:	gdm-Xnest < 2:2.28
+Obsoletes:	gdm-systemd < 2:3.2.1.1-10
+Obsoletes:	gdm-upstart < 2:3.20
+Obsoletes:	gdm-user-switch-applet < 2:3.0.0-2
+Obsoletes:	gnome-applet-fast-user-switch < 2.21
 Conflicts:	gdkxft
 Conflicts:	systemd < 186
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -306,8 +307,8 @@ fi
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
-%attr(755,root,root) %{_libexecdir}/gdm-disable-wayland
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
+%attr(755,root,root) %{_libexecdir}/gdm-runtime-config
 %attr(755,root,root) %{_libexecdir}/gdm-session-worker
 %attr(755,root,root) %{_libexecdir}/gdm-simple-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-wayland-session
