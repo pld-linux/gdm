@@ -1,8 +1,7 @@
-diff -urN gdm-2.6.0.3.orig/data/Xsession.in gdm-2.6.0.3/data/Xsession.in
---- gdm-2.6.0.3.orig/data/Xsession.in	2004-05-28 21:50:17.000000000 +0200
-+++ gdm-2.6.0.3/data/Xsession.in	2004-07-09 15:07:16.039478016 +0200
-@@ -35,6 +35,10 @@
- test -f /etc/xprofile && . /etc/xprofile
+--- gdm-40.0/data/Xsession.in.orig	2021-03-30 15:27:29.673587600 +0200
++++ gdm-40.0/data/Xsession.in	2021-04-08 06:33:38.688182706 +0200
+@@ -45,6 +45,10 @@
+ fi
  test -f "$HOME/.xprofile" && . "$HOME/.xprofile"
  
 +if [ ! -f $HOME/.profile ] && echo $SHELL |grep -q "bash"; then
@@ -10,12 +9,18 @@ diff -urN gdm-2.6.0.3.orig/data/Xsession.in gdm-2.6.0.3/data/Xsession.in
 +fi
 +
  # Translation stuff
- if [ -x "@EXPANDED_LIBEXECDIR@/gdmtranslate" ] ; then
-   gdmtranslate="@EXPANDED_LIBEXECDIR@/gdmtranslate"
-@@ -222,14 +226,23 @@
+ if [ -x "@libexecdir@/gdmtranslate" ] ; then
+   gdmtranslate="@libexecdir@/gdmtranslate"
+@@ -207,12 +211,21 @@
    fi
  fi
  
+-# add ssh-agent if found
+-sshagent="`gdmwhich ssh-agent`"
+-if [ -n "$sshagent" ] && [ -x "$sshagent" ] && [ -z "$SSH_AUTH_SOCK" ]; then
+-    command="$sshagent -- $command"
+-elif [ -z "$sshagent" ] ; then
+-    echo "$0: ssh-agent not found!"
 +# Keep in sync with Xclients from xinitrc-ng 
 +syswmfile="/etc/sysconfig/desktop"
 +
@@ -31,16 +36,6 @@ diff -urN gdm-2.6.0.3.orig/data/Xsession.in gdm-2.6.0.3/data/Xsession.in
 +    command="$HOME/bin/$command.sh"
 +elif [ -x "$wmstyledir/$command.sh" ]; then
 +    command="$wmstyledir/$command.sh"
-+fi
-+
--# add ssh-agent if found
--sshagent="`gdmwhich ssh-agent`"
--if [ -n "$sshagent" ] && [ -x "$sshagent" ] && [ -z "$SSH_AUTH_SOCK" ]; then
--    command="$sshagent -- $command"
--elif [ -z "$sshagent" ] ; then
--    echo "$0: ssh-agent not found!"
--fi
--
- echo "$0: Setup done, will execute: $command"
+ fi
  
- eval exec $command
+ echo "$0: Setup done, will execute: $command"

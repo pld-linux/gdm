@@ -40,6 +40,7 @@ URL:		https://wiki.gnome.org/Projects/GDM
 BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
 BuildRequires:	check-devel >= 0.9.4
+BuildRequires:	dconf
 BuildRequires:	gettext-tools >= 0.19.8
 BuildRequires:	glib2-devel >= %{glib2_ver}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
