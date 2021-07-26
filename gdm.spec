@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	40.0
+Version:	40.1
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
 Source0:	https://download.gnome.org/sources/gdm/40/%{name}-%{version}.tar.xz
-# Source0-md5:	85e6a306f1d0c88c276938a0519d8332
+# Source0-md5:	fa32fee88d242ebf5d1c2fb69e74457e
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
