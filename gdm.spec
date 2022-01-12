@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	41.0
+Version:	41.3
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
 Source0:	https://download.gnome.org/sources/gdm/41/%{name}-%{version}.tar.xz
-# Source0-md5:	55cb882364fbfe86eb6f9dc3b2b956ed
+# Source0-md5:	32e70f633b0709f0345b327d57349c82
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -69,7 +69,7 @@ BuildRequires:	xorg-lib-libXft-devel
 BuildRequires:	xorg-lib-libXi-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 # for "XServer disables tcp access by default" detection
-BuildRequires:	xorg-xserver-server-devel
+BuildRequires:	xorg-xserver-server-devel >= 1.17
 BuildRequires:	xz
 BuildRequires:	yelp-tools
 Requires(post,postun):	glib2 >= %{glib2_ver}
@@ -99,7 +99,7 @@ Requires:	xorg-app-sessreg
 Requires:	xorg-app-xmodmap
 Suggests:	ConsoleKit-x11 >= 0.4.1
 Suggests:	pam-pam_gnome_keyring
-Suggests:	xorg-xserver-Xephyr
+Suggests:	xorg-xserver-Xephyr >= 1.17
 Suggests:	zenity
 Provides:	XDM
 Provides:	group(xdm)
