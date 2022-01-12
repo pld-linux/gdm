@@ -1,6 +1,6 @@
---- gdm-41.3/meson.build.orig	2022-01-12 17:32:17.907302592 +0100
-+++ gdm-41.3/meson.build	2022-01-12 18:04:05.166970080 +0100
-@@ -72,23 +72,6 @@ x_deps = declare_dependency(
+--- gdm-41.3/meson.build.orig	2022-01-12 21:07:22.248332481 +0100
++++ gdm-41.3/meson.build	2022-01-12 21:14:05.232427434 +0100
+@@ -72,23 +72,10 @@ x_deps = declare_dependency(
  # Xserver 1.17 & later default to -nolisten and require -listen for remote access
  xserver_deps = dependency('xorg-server', version : '>=1.17', required : false)
  xserver_has_listen = xserver_deps.found()
@@ -18,10 +18,11 @@
 -    i = i + 1
 -  endforeach
 -else
--  # what to do, what to do, this is wrong, but this just sets the
--  # defaults, perhaps this user is cross compiling or some such
++if true
+   # what to do, what to do, this is wrong, but this just sets the
+   # defaults, perhaps this user is cross compiling or some such
 -  x_path = '/usr/bin/X11:/usr/X11R6/bin:/opt/X11R6/bin'
 +  x_path = '/usr/bin'
    x_bin = '/usr/bin/X'
--endif
+ endif
  xdmcp_dep = cc.find_library('Xdmcp', required: get_option('xdmcp'))
