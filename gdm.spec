@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	41.3
+Version:	42.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/41/%{name}-%{version}.tar.xz
-# Source0-md5:	32e70f633b0709f0345b327d57349c82
+Source0:	https://download.gnome.org/sources/gdm/42/%{name}-%{version}.tar.xz
+# Source0-md5:	8fb99fd6032127fe6f57462c696607e5
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -48,6 +48,7 @@ BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	iso-codes
 BuildRequires:	keyutils-devel >= 1.6
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
+BuildRequires:	libgudev-devel >= 232
 BuildRequires:	libselinux-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libwrap-devel
@@ -61,6 +62,7 @@ BuildRequires:	rpmbuild(find_lang) >= 1.23
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
+BuildRequires:	udev-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXau-devel
 BuildRequires:	xorg-lib-libXdmcp-devel
@@ -91,6 +93,7 @@ Requires:	gnome-settings-daemon >= 3.26.0
 Requires:	hicolor-icon-theme
 Requires:	iso-codes
 Requires:	libcanberra-gtk3 >= 0.4
+Requires:	libgudev >= 232
 Requires:	pam >= 0.99.7.1
 Requires:	polkit-gnome >= 0.93
 Requires:	which
@@ -168,6 +171,7 @@ Skrypt init dla GDM-a.
 Summary:	GDM libraries
 Summary(pl.UTF-8):	Biblioteki GDM
 Group:		Libraries
+Requires:	glib2 >= %{glib2_ver}
 
 %description libs
 GDM libraries.
@@ -180,6 +184,9 @@ Summary:	Header files for GDM
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja
 Group:		X11/Development/Libraries
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Requires:	glib2-devel >= %{glib2_ver}
+Requires:	libselinux-devel
+Requires:	systemd-devel >= 1:209
 
 %description devel
 This package contains the files necessary to develop applications
