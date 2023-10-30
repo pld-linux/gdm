@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	44.1
+Version:	45.0.1
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/44/%{name}-%{version}.tar.xz
-# Source0-md5:	8b857cf6510cc038538399aaaeaa0dff
+Source0:	https://download.gnome.org/sources/gdm/45/%{name}-%{version}.tar.xz
+# Source0-md5:	4912429c0231a95fedd086d1ac8f54ea
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -53,7 +53,7 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	libxcb-devel
-BuildRequires:	meson >= 0.50
+BuildRequires:	meson >= 0.57
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig
