@@ -7,7 +7,7 @@
 # Conditional build:
 %bcond_without	static_libs	# static library
 
-%define		glib2_ver	1:2.56.0
+%define		glib2_ver	1:2.68.0
 Summary:	GNOME Display Manager
 Summary(es.UTF-8):	Administrador de Entrada del GNOME
 Summary(ja.UTF-8):	GNOME ディスプレイマネージャ
@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	45.0.1
+Version:	46.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/45/%{name}-%{version}.tar.xz
-# Source0-md5:	4912429c0231a95fedd086d1ac8f54ea
+Source0:	https://download.gnome.org/sources/gdm/46/%{name}-%{version}.tar.xz
+# Source0-md5:	7c633379109fe5fb23734888649cdab0
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -46,6 +46,7 @@ BuildRequires:	glib2-devel >= %{glib2_ver}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
 BuildRequires:	gtk+3-devel >= 3.0.0
 BuildRequires:	iso-codes
+BuildRequires:	json-glib-devel >= 1.2.0
 BuildRequires:	keyutils-devel >= 1.6
 BuildRequires:	libcanberra-gtk3-devel >= 0.4
 BuildRequires:	libgudev-devel >= 232
@@ -92,6 +93,7 @@ Requires:	gnome-session >= 3.26.0
 Requires:	gnome-settings-daemon >= 3.26.0
 Requires:	hicolor-icon-theme
 Requires:	iso-codes
+Requires:	json-glib >= 1.2.0
 Requires:	libcanberra-gtk3 >= 0.4
 Requires:	libgudev >= 232
 Requires:	pam >= 0.99.7.1
@@ -313,6 +315,7 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS MAINTAINERS NEWS README.md
 %attr(755,root,root) %{_sbindir}/gdm
+%attr(755,root,root) %{_bindir}/gdm-config
 %attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
@@ -366,12 +369,7 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgdm.so
-%dir %{_includedir}/gdm
-%{_includedir}/gdm/gdm-client-glue.h
-%{_includedir}/gdm/gdm-client.h
-%{_includedir}/gdm/gdm-pam-extensions.h
-%{_includedir}/gdm/gdm-sessions.h
-%{_includedir}/gdm/gdm-user-switching.h
+%{_includedir}/gdm
 %{_pkgconfigdir}/gdm.pc
 %{_pkgconfigdir}/gdm-pam-extensions.pc
 %{_datadir}/gir-1.0/Gdm-1.0.gir
