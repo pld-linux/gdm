@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	46.0
+Version:	46.2
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
 Source0:	https://download.gnome.org/sources/gdm/46/%{name}-%{version}.tar.xz
-# Source0-md5:	7c633379109fe5fb23734888649cdab0
+# Source0-md5:	1d92ec4dd0643907fa135056aee18066
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
