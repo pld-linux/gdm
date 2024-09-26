@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	46.2
+Version:	47.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/46/%{name}-%{version}.tar.xz
-# Source0-md5:	1d92ec4dd0643907fa135056aee18066
+Source0:	https://download.gnome.org/sources/gdm/47/%{name}-%{version}.tar.xz
+# Source0-md5:	0312497290b26525e14fbc153f1a87f2
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -40,7 +40,7 @@ URL:		https://wiki.gnome.org/Projects/GDM
 BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
 BuildRequires:	check-devel >= 0.9.4
-BuildRequires:	dconf
+BuildRequires:	dconf-devel
 BuildRequires:	gettext-tools >= 0.19.8
 BuildRequires:	glib2-devel >= %{glib2_ver}
 BuildRequires:	gobject-introspection-devel >= 0.9.12
@@ -316,7 +316,6 @@ fi
 %doc AUTHORS MAINTAINERS NEWS README.md
 %attr(755,root,root) %{_sbindir}/gdm
 %attr(755,root,root) %{_bindir}/gdm-config
-%attr(755,root,root) %{_bindir}/gdm-screenshot
 %attr(755,root,root) %{_bindir}/gdmflexiserver
 %attr(755,root,root) %{_libexecdir}/gdm-host-chooser
 %attr(755,root,root) %{_libexecdir}/gdm-runtime-config
