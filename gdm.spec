@@ -16,13 +16,13 @@ Summary(pt_BR.UTF-8):	Gerenciador de Entrada do GNOME
 Summary(ru.UTF-8):	Дисплейный менеджер GNOME
 Summary(uk.UTF-8):	Дисплейний менеджер GNOME
 Name:		gdm
-Version:	47.0
+Version:	48.0
 Release:	1
 Epoch:		2
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://download.gnome.org/sources/gdm/47/%{name}-%{version}.tar.xz
-# Source0-md5:	0312497290b26525e14fbc153f1a87f2
+Source0:	https://download.gnome.org/sources/gdm/48/%{name}-%{version}.tar.xz
+# Source0-md5:	a17868752c9a90ed560891886f2882f2
 Source1:	%{name}.pamd
 Source2:	%{name}.init
 Source3:	%{name}-pld-logo.png
@@ -60,7 +60,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pkgconfig
 BuildRequires:	plymouth-devel
 BuildRequires:	rpmbuild(find_lang) >= 1.23
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	udev-devel
@@ -218,19 +218,23 @@ Pakiet zawiera statyczne biblioteki GDM.
 %patch -P3 -p1
 
 %build
-%meson build \
+%meson \
 	%{!?with_static_libs:--default-library=shared} \
 	-Dgdm-xsession=true \
 	-Dgroup=xdm \
 	-Dinitial-vt=9 \
 	-Dipv6=true \
+	-Dlibaudit=enabled \
 	-Dpam-mod-dir=/%{_lib}/security \
 	-Dpam-prefix=/etc \
+	-Dplymouth=enabled \
+	-Dselinux=enabled \
 	-Dtcp-wrappers=true \
 	-Dudev-dir=/lib/udev/rules.d \
-	-Duser=xdm
+	-Duser=xdm \
+	-Dxdmcp=enabled
 
-%ninja_build -C build
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -239,7 +243,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,pam.d,security} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_datadir}/xsessions,%{systemdunitdir}} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-%ninja_install -C build
+%meson_install
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/gdm-password
 cp -p %{SOURCE10} $RPM_BUILD_ROOT/etc/pam.d/gdm-fingerprint
@@ -338,6 +342,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/pam.d/gdm-*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/security/blacklist.gdm
 %{_datadir}/dconf/profile/gdm
+%{_datadir}/polkit-1/rules.d/20-gdm.rules
 %dir %{systemduserunitdir}/gnome-session@gnome-login.target.d
 %{systemduserunitdir}/gnome-session@gnome-login.target.d/session.conf
 %attr(1770,root,xdm) %dir /var/lib/gdm
@@ -373,6 +378,8 @@ fi
 %{_pkgconfigdir}/gdm-pam-extensions.pc
 %{_datadir}/gir-1.0/Gdm-1.0.gir
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libgdm.a
+%endif
