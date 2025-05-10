@@ -279,6 +279,12 @@ umask 022
 
 %post
 %update_icon_cache hicolor
+%banner %{name} -e << EOF
+!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! If you want to run Xorg sessions you have to give Xwrapper root permissons. !
+! To do this, set 'needs_root_rights = yes' in /etc/X11/Xwrapper.config       !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+EOF
 
 %postun
 %update_icon_cache hicolor
