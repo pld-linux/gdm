@@ -36,6 +36,7 @@ Patch0:		%{name}-xdmcp.patch
 Patch1:		%{name}-xsession.patch
 Patch2:		%{name}-defaults.patch
 Patch3:		%{name}-both-libraries.patch
+Patch4:		display-fallback.patch
 URL:		https://wiki.gnome.org/Projects/GDM
 BuildRequires:	accountsservice-devel >= 0.6.35
 BuildRequires:	audit-libs-devel
@@ -216,6 +217,7 @@ Pakiet zawiera statyczne biblioteki GDM.
 %patch -P1 -p1
 %patch -P2 -p1
 %patch -P3 -p1
+%patch -P4 -p1
 
 %build
 %meson \
